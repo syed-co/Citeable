@@ -35,7 +35,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:300;height:56px;display:flex;ali
 .nav-pill{background:var(--blue)!important;color:#fff!important;padding:7px 17px;border-radius:7px;font-weight:500!important;font-size:13px!important;box-shadow:0 0 16px rgba(26,75,255,.35)}
 
 /* HERO */
-.hero{position:relative;min-height:100svh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:80px 24px 56px;overflow:hidden}
+.hero{position:relative;min-height:100svh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:72px 24px 40px;overflow:hidden}
 
 /* Animated grid */
 .dot-grid{position:absolute;inset:0;background-image:radial-gradient(circle,rgba(255,255,255,.1) 1px,transparent 1px);background-size:32px 32px;mask-image:radial-gradient(ellipse 90% 80% at 50% 50%,black 20%,transparent 100%);pointer-events:none}
@@ -54,17 +54,17 @@ nav{position:fixed;top:0;left:0;right:0;z-index:300;height:56px;display:flex;ali
 
 .hero-content{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;text-align:center;max-width:700px;width:100%}
 
-.hero-badge{display:inline-flex;align-items:center;gap:8px;background:var(--cyan-d);border:1px solid rgba(0,255,209,.22);color:var(--cyan);font-size:11.5px;font-weight:500;padding:5px 14px;border-radius:100px;margin-bottom:28px;min-width:260px;justify-content:center}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;background:var(--cyan-d);border:1px solid rgba(0,255,209,.22);color:var(--cyan);font-size:11.5px;font-weight:500;padding:5px 14px;border-radius:100px;margin-bottom:16px;min-width:260px;justify-content:center}
 .badge-dot{width:5px;height:5px;border-radius:50%;background:var(--cyan);box-shadow:0 0 5px var(--cyan);flex-shrink:0}
 #badge-text{transition:opacity .25s}
 
-h1{font-family:var(--serif);font-weight:700;font-size:clamp(38px,6vw,74px);line-height:1.04;letter-spacing:-1.5px;color:var(--ink-d);margin-bottom:20px}
+h1{font-family:var(--serif);font-weight:700;font-size:clamp(32px,5vw,58px);line-height:1.06;letter-spacing:-1.5px;color:var(--ink-d);margin-bottom:14px}
 
-.hero-sub{font-size:16px;font-weight:300;color:var(--ink2-d);line-height:1.72;max-width:500px;margin-bottom:40px}
+.hero-sub{font-size:14.5px;font-weight:300;color:var(--ink2-d);line-height:1.65;max-width:480px;margin-bottom:24px}
 
 /* SCAN BOX */
-.scan-box{width:100%;max-width:620px;background:var(--void2);border:1px solid var(--bd);border-radius:14px;padding:22px;box-shadow:0 0 0 1px var(--bd2),0 24px 64px rgba(0,0,0,.5);transition:border-color .3s,box-shadow .3s}
-.scan-box.glow{border-color:rgba(0,255,209,.28);box-shadow:0 0 0 1px rgba(0,255,209,.08),0 24px 64px rgba(0,0,0,.5),0 0 60px rgba(0,255,209,.07)}
+.scan-box{width:100%;max-width:620px;background:rgba(0,255,209,.04);border:1px solid rgba(0,255,209,.22);border-radius:14px;padding:22px;box-shadow:0 0 0 1px rgba(0,255,209,.06),0 24px 64px rgba(0,0,0,.5),0 0 80px rgba(0,255,209,.1);transition:border-color .3s,box-shadow .3s}
+.scan-box.glow{border-color:rgba(0,255,209,.45);box-shadow:0 0 0 1px rgba(0,255,209,.15),0 24px 64px rgba(0,0,0,.5),0 0 100px rgba(0,255,209,.18)}
 .scan-lbl{font-size:11.5px;font-weight:500;color:var(--ink3-d);margin-bottom:11px;display:flex;align-items:center;gap:7px}
 .scan-lbl::before{content:'';width:14px;height:1px;background:var(--ink3-d)}
 .url-row{display:flex;gap:8px}
@@ -451,8 +451,8 @@ footer{border-top:1px solid var(--bd);padding:32px 44px;display:flex;justify-con
 
   <div class="hero-content" id="hero-content">
     <div class="hero-badge"><span class="badge-dot"></span><span id="badge-text">Answer Engine Optimization</span></div>
-    <h1>Your buyers are asking<br>AI questions.<br>Are you the answer?</h1>
-    <p class="hero-sub">While you're focused on Google rankings, your customers switched to asking ChatGPT and Perplexity. The businesses getting cited there are taking your clients. Scan your website free to find out where you stand.</p>
+    <h1>Your buyers ask AI.<br>Are you the answer?</h1>
+    <p class="hero-sub">ChatGPT and Perplexity are naming your competitors — not you. Scan your website free to find out where you stand.</p>
 
     <div class="scan-box" id="scan-box">
 
@@ -1150,8 +1150,13 @@ ${data.notes || '(none)'}
 function cleanUrl(r){
   let u=r.trim();
   if(!u)return null;
+  // strip protocol and www
   u=u.replace(/^https?:\/\//i,'').replace(/^www\./i,'').split('/')[0].split('?')[0];
-  if(!u||!u.includes('.'))return null;
+  // replace any commas (autocorrect turning .ca into ,ca etc)
+  u=u.replace(/,/g,'.');
+  // remove anything that's not a valid domain character
+  u=u.replace(/[^a-zA-Z0-9.\-]/g,'');
+  if(!u||u.length<3||!u.includes('.'))return null;
   return u.toLowerCase();
 }
 function sleep(ms){return new Promise(r=>setTimeout(r,ms));}
