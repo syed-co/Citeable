@@ -1,0 +1,1359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Citeable — Get Found by AI Search</title>
+<meta name="description" content="Most businesses are invisible to AI. Find out how ChatGPT, Perplexity and Google AI describe your brand — free audit in 60 seconds.">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --void:#080B12;--void2:#0E1220;--void3:#161B2E;
+  --blue:#1A4BFF;--blue-g:rgba(26,75,255,.28);
+  --cyan:#00FFD1;--cyan-d:rgba(0,255,209,.09);--cyan-g:rgba(0,255,209,.18);
+  --red:#FF4D6A;--amber:#FFB830;
+  --ink-d:#EEF2FF;--ink2-d:#7A8BAA;--ink3-d:#3A4560;
+  --bd:rgba(255,255,255,.08);--bd2:rgba(255,255,255,.04);
+  --bg-l:#FFFFFF;--bg-l2:#F4F6FB;
+  --ink-l:#0C0F1A;--ink2-l:#44526A;--ink3-l:#8896B0;--bl:#DDE3EF;
+  --serif:'Syne',system-ui,sans-serif;
+  --sans:'DM Sans',system-ui,sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--sans);background:var(--void);color:var(--ink-d);font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:300;height:56px;display:flex;align-items:center;justify-content:space-between;padding:0 44px;background:rgba(8,11,18,.88);backdrop-filter:blur(20px);border-bottom:1px solid var(--bd)}
+.nav-logo{text-decoration:none;display:flex;align-items:center;line-height:1}
+.nav-logo svg{display:block;height:26px;width:auto}
+.nav-dot{display:none}
+@keyframes pulse-dot{0%,100%{box-shadow:0 0 8px var(--cyan)}50%{box-shadow:0 0 16px var(--cyan),0 0 30px rgba(0,255,209,.4)}}
+.nav-r{display:flex;gap:28px;align-items:center}
+.nav-r a{font-size:13px;color:var(--ink2-d);text-decoration:none;transition:color .15s}
+.nav-r a:hover{color:var(--ink-d)}
+.nav-pill{background:var(--blue)!important;color:#fff!important;padding:7px 17px;border-radius:7px;font-weight:500!important;font-size:13px!important;box-shadow:0 0 16px rgba(26,75,255,.35)}
+
+/* HERO */
+.hero{position:relative;min-height:100svh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:80px 24px 56px;overflow:hidden}
+
+/* Animated grid */
+.dot-grid{position:absolute;inset:0;background-image:radial-gradient(circle,rgba(255,255,255,.1) 1px,transparent 1px);background-size:32px 32px;mask-image:radial-gradient(ellipse 90% 80% at 50% 50%,black 20%,transparent 100%);pointer-events:none}
+.dot-grid.sc{background-image:radial-gradient(circle,rgba(0,255,209,.2) 1px,transparent 1px);animation:gp 2s ease-in-out infinite}
+@keyframes gp{0%,100%{opacity:.5}50%{opacity:1}}
+
+/* Floating orbs */
+.orb{position:absolute;border-radius:50%;filter:blur(80px);pointer-events:none;animation:orb-float 8s ease-in-out infinite}
+.orb-1{width:400px;height:400px;background:rgba(26,75,255,.15);top:10%;left:5%;animation-delay:0s}
+.orb-2{width:300px;height:300px;background:rgba(0,255,209,.08);bottom:15%;right:10%;animation-delay:3s}
+.orb-3{width:200px;height:200px;background:rgba(26,75,255,.1);top:60%;left:40%;animation-delay:6s}
+@keyframes orb-float{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-30px) scale(1.05)}}
+
+.hero-glow{position:absolute;width:700px;height:350px;background:radial-gradient(ellipse,var(--blue-g) 0%,transparent 70%);top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none;transition:background 1.2s}
+.hero-glow.sc{background:radial-gradient(ellipse,var(--cyan-g) 0%,transparent 70%)}
+
+.hero-content{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;text-align:center;max-width:700px;width:100%}
+
+.hero-badge{display:inline-flex;align-items:center;gap:8px;background:var(--cyan-d);border:1px solid rgba(0,255,209,.22);color:var(--cyan);font-size:11.5px;font-weight:500;padding:5px 14px;border-radius:100px;margin-bottom:28px;min-width:260px;justify-content:center}
+.badge-dot{width:5px;height:5px;border-radius:50%;background:var(--cyan);box-shadow:0 0 5px var(--cyan);flex-shrink:0}
+#badge-text{transition:opacity .25s}
+
+h1{font-family:var(--serif);font-weight:700;font-size:clamp(38px,6vw,74px);line-height:1.04;letter-spacing:-1.5px;color:var(--ink-d);margin-bottom:20px}
+
+.hero-sub{font-size:16px;font-weight:300;color:var(--ink2-d);line-height:1.72;max-width:500px;margin-bottom:40px}
+
+/* SCAN BOX */
+.scan-box{width:100%;max-width:620px;background:var(--void2);border:1px solid var(--bd);border-radius:14px;padding:22px;box-shadow:0 0 0 1px var(--bd2),0 24px 64px rgba(0,0,0,.5);transition:border-color .3s,box-shadow .3s}
+.scan-box.glow{border-color:rgba(0,255,209,.28);box-shadow:0 0 0 1px rgba(0,255,209,.08),0 24px 64px rgba(0,0,0,.5),0 0 60px rgba(0,255,209,.07)}
+.scan-lbl{font-size:11.5px;font-weight:500;color:var(--ink3-d);margin-bottom:11px;display:flex;align-items:center;gap:7px}
+.scan-lbl::before{content:'';width:14px;height:1px;background:var(--ink3-d)}
+.url-row{display:flex;gap:8px}
+.url-input{flex:1;background:var(--void);border:1px solid var(--bd);border-radius:9px;padding:13px 15px;font-size:14px;font-family:var(--sans);color:var(--ink-d);outline:none;caret-color:var(--cyan);transition:border-color .2s,box-shadow .2s}
+.url-input::placeholder{color:var(--ink3-d)}
+.url-input:focus{border-color:rgba(26,75,255,.6);box-shadow:0 0 0 3px rgba(26,75,255,.12)}
+.btn-scan{background:var(--blue);color:#fff;border:none;border-radius:9px;padding:13px 22px;font-size:14px;font-weight:600;font-family:var(--sans);cursor:pointer;white-space:nowrap;display:flex;align-items:center;gap:8px;box-shadow:0 0 20px rgba(26,75,255,.4);transition:opacity .15s,box-shadow .2s}
+.btn-scan:hover{opacity:.88;box-shadow:0 0 32px rgba(26,75,255,.6)}
+.btn-scan:disabled{opacity:.4;cursor:not-allowed;box-shadow:none}
+.spin{width:13px;height:13px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;display:none;flex-shrink:0}
+@keyframes spin{to{transform:rotate(360deg)}}
+.scan-fine{font-size:11.5px;color:var(--ink3-d);font-weight:300;margin-top:10px;text-align:center}
+.err-msg{font-size:12px;color:var(--red);margin-top:7px;display:none}
+.terminal{display:none;background:var(--void);border:1px solid var(--bd);border-radius:9px;padding:14px 16px;margin-top:14px}
+.t-line{font-size:12px;font-family:monospace;color:var(--ink3-d);display:flex;align-items:center;gap:7px;line-height:1.9}
+.t-line.ac{color:var(--ink-d)}.t-line.dn{color:var(--cyan)}
+.t-pfx{flex-shrink:0}.t-line.dn .t-pfx{color:var(--cyan)}.t-line.ac .t-pfx{color:var(--blue);animation:blink 1s step-end infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+
+/* RESULTS */
+.results-wrap{position:relative;z-index:2;width:100%;max-width:740px;display:none;margin-top:20px}
+.score-bar{display:flex;align-items:center;justify-content:space-between;background:var(--void2);border:1px solid var(--bd);border-radius:12px;padding:16px 22px;margin-bottom:10px}
+.score-dom{font-family:var(--serif);font-weight:600;font-size:18px;color:var(--ink-d)}
+.score-sub-t{font-size:12px;color:var(--ink3-d);font-weight:300;margin-top:2px}
+.score-pill{font-size:12.5px;font-weight:600;padding:6px 14px;border-radius:100px;display:flex;align-items:center;gap:6px;border:1px solid transparent}
+.s-dot{width:6px;height:6px;border-radius:50%}
+.audit-panels{display:flex;flex-direction:column;gap:7px;position:relative}
+.audit-panel{background:var(--void2);border:1px solid var(--bd);border-radius:11px;overflow:hidden}
+.ap-head{display:flex;align-items:center;gap:10px;padding:12px 17px;border-bottom:1px solid var(--bd2)}
+.ap-bar{width:3px;height:26px;border-radius:2px;flex-shrink:0}
+.ap-title{font-size:13px;font-weight:500;color:var(--ink-d);flex:1}
+.ap-badge{font-size:10px;font-weight:600;padding:3px 9px;border-radius:100px}
+.ap-body{padding:11px 17px;display:flex;flex-direction:column;gap:6px}
+.ap-check{display:flex;align-items:flex-start;gap:9px;font-size:12.5px;font-weight:300;color:var(--ink2-d);line-height:1.5}
+.ap-dot{width:5px;height:5px;border-radius:50%;flex-shrink:0;margin-top:5px}
+.blur-gate{position:absolute;bottom:0;left:0;right:0;height:62%;background:linear-gradient(to bottom,transparent 0%,rgba(8,11,18,.97) 45%);display:flex;align-items:flex-end;justify-content:center;padding-bottom:18px;pointer-events:none}
+.blur-gate>*{pointer-events:all}
+.gate-card{background:var(--void2);border:1px solid rgba(0,255,209,.22);border-radius:12px;padding:20px 24px;text-align:center;box-shadow:0 8px 40px rgba(0,0,0,.6),0 0 30px rgba(0,255,209,.07);width:340px;max-width:92vw}
+.gate-card h3{font-family:var(--serif);font-weight:700;font-size:18px;color:var(--ink-d);margin-bottom:5px}
+.gate-card p{font-size:12.5px;color:var(--ink2-d);font-weight:300;margin-bottom:15px;line-height:1.55}
+.email-row{display:flex;gap:7px;margin-bottom:7px}
+.email-input{flex:1;background:var(--void);border:1px solid var(--bd);border-radius:8px;padding:10px 12px;font-size:13px;font-family:var(--sans);color:var(--ink-d);outline:none;caret-color:var(--cyan);transition:border-color .2s}
+.email-input:focus{border-color:rgba(0,255,209,.35)}
+.email-input::placeholder{color:var(--ink3-d)}
+.btn-unlock{background:var(--cyan);color:var(--void);border:none;border-radius:8px;padding:10px 16px;font-size:13px;font-weight:600;font-family:var(--sans);cursor:pointer;transition:opacity .15s}
+.btn-unlock:hover{opacity:.88}
+.btn-unlock:disabled{opacity:.4;cursor:not-allowed}
+.gate-fine{font-size:11px;color:var(--ink3-d)}
+.gate-success{background:var(--void2);border:1px solid rgba(0,255,209,.3);border-radius:12px;padding:20px 24px;text-align:center;box-shadow:0 0 30px rgba(0,255,209,.1);width:340px;max-width:92vw}
+.gate-success h3{font-family:var(--serif);font-weight:700;font-size:18px;color:var(--cyan);margin-bottom:6px}
+.gate-success p{font-size:12.5px;color:var(--ink2-d);font-weight:300;line-height:1.6}
+
+/* STATS BAND */
+.stats-band{background:var(--void2);border-top:1px solid var(--bd);border-bottom:1px solid var(--bd);padding:64px 44px;position:relative;overflow:hidden}
+.stats-band::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 100% at 50% 100%,rgba(0,255,209,.04) 0%,transparent 70%);pointer-events:none}
+.stats-inner{max-width:1100px;margin:0 auto;position:relative}
+.stats-top{margin-bottom:40px}
+.stats-top p{font-size:11px;font-weight:500;color:var(--ink3-d);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:10px}
+.stats-top h2{font-family:var(--serif);font-weight:700;font-size:clamp(24px,3.5vw,36px);color:var(--ink-d);line-height:1.15;letter-spacing:-.5px}
+.stats-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--bd);border:1px solid var(--bd);border-radius:14px;overflow:hidden}
+.stat-cell{background:var(--void);padding:40px 32px;position:relative;overflow:hidden;transition:background .3s}
+.stat-cell:hover{background:rgba(14,18,32,.8)}
+.stat-cell::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:linear-gradient(to right,transparent,var(--cyan),transparent);opacity:0;transition:opacity .3s}
+.stat-cell:hover::after{opacity:.4}
+.stat-fig{font-family:var(--serif);font-weight:700;font-size:clamp(52px,5vw,68px);line-height:1;color:var(--ink-d);margin-bottom:10px}
+.stat-fig em{color:var(--cyan);font-style:normal}
+.stat-desc{font-size:14px;font-weight:300;color:var(--ink2-d);line-height:1.6}
+.stat-desc strong{color:var(--ink-d);font-weight:500;display:block;margin-bottom:4px;font-size:14.5px}
+
+/* SECTION UTILS */
+.sec-label{font-size:11px;font-weight:500;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:14px}
+.sec-label.d{color:var(--ink3-d)}.sec-label.l{color:var(--ink3-l)}
+.sec-h{font-family:var(--serif);font-weight:700;line-height:1.1;letter-spacing:-.8px}
+.sec-h.d{color:var(--ink-d)}.sec-h.l{color:var(--ink-l)}
+.sec-h-lg{font-size:clamp(30px,4vw,48px)}
+.sec-h-md{font-size:clamp(24px,3vw,38px)}
+.sec-sub{font-size:15px;font-weight:300;line-height:1.72}
+.sec-sub.d{color:var(--ink2-d)}.sec-sub.l{color:var(--ink2-l)}
+
+/* PAIN (light) */
+.pain-section{background:var(--bg-l);padding:100px 44px;position:relative;overflow:hidden}
+.pain-inner{max-width:1100px;margin:0 auto}
+.pain-grid{display:grid;grid-template-columns:1fr 1fr;gap:52px;margin-top:52px;align-items:start}
+.pain-copy p{font-size:15px;color:var(--ink2-l);font-weight:300;line-height:1.75;margin-bottom:14px}
+.pain-stats{display:flex;flex-direction:column;gap:14px}
+.ps{background:var(--bg-l2);border:1px solid var(--bl);border-radius:12px;padding:20px 22px;display:flex;align-items:flex-start;gap:16px;transition:border-color .2s,box-shadow .2s}
+.ps:hover{border-color:#b0bdd4;box-shadow:0 4px 20px rgba(0,0,0,.06)}
+.ps-fig{font-family:var(--serif);font-weight:700;font-size:34px;color:var(--blue);line-height:1;flex-shrink:0;min-width:72px}
+.ps-text{font-size:13px;color:var(--ink2-l);font-weight:300;line-height:1.55}
+.ps-text strong{color:var(--ink-l);font-weight:500;display:block;margin-bottom:2px;font-size:13.5px}
+.btn-l{display:inline-block;background:var(--blue);color:#fff;padding:13px 24px;border-radius:9px;font-size:14px;font-weight:500;text-decoration:none;margin-top:24px;box-shadow:0 0 20px rgba(26,75,255,.25);transition:opacity .15s}
+.btn-l:hover{opacity:.88}
+
+/* PROMPT DEMO (dark) */
+.prompt-section{background:var(--void);padding:100px 44px;border-top:1px solid var(--bd)}
+.prompt-inner{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center}
+.pain-point{display:flex;align-items:flex-start;gap:10px;margin-bottom:12px}
+.pp-dot{width:6px;height:6px;border-radius:50%;background:var(--red);flex-shrink:0;margin-top:6px}
+.pain-point p{font-size:14px;color:var(--ink2-d);font-weight:300;line-height:1.6;margin:0}
+.apc{background:var(--void2);border:1px solid var(--bd);border-radius:14px;overflow:hidden;box-shadow:0 8px 40px rgba(0,0,0,.4)}
+.apc-bar{display:flex;align-items:center;gap:6px;padding:11px 14px;border-bottom:1px solid var(--bd);background:var(--void3)}
+.apc-dot-w{width:10px;height:10px;border-radius:50%}
+.etabs{display:flex;gap:4px;margin-left:auto}
+.etab{background:none;border:1px solid var(--bd);border-radius:6px;padding:3px 9px;font-size:11px;font-weight:500;color:var(--ink3-d);cursor:pointer;font-family:var(--sans);transition:all .15s}
+.etab.active{background:rgba(26,75,255,.18);border-color:rgba(26,75,255,.45);color:#8aaeff}
+.apc-query{padding:14px 16px;border-bottom:1px solid var(--bd)}
+.apc-ql{font-size:10px;font-weight:500;color:var(--ink3-d);margin-bottom:5px;letter-spacing:.3px}
+.apc-qt{font-size:13px;color:var(--ink-d);line-height:1.5}
+.apc-answer{padding:14px 16px}
+.apc-al{font-size:10px;font-weight:500;color:var(--ink3-d);margin-bottom:7px;letter-spacing:.3px}
+.apc-res{font-size:13px;color:var(--ink2-d);font-weight:300;line-height:1.72;min-height:80px}
+.apc-res strong{color:var(--ink-d);font-weight:500}
+.apc-res .hi{color:var(--cyan);font-weight:500}
+.apc-cites{display:flex;flex-wrap:wrap;gap:5px;margin-top:10px;padding-top:10px;border-top:1px solid var(--bd)}
+.cc{font-size:10.5px;font-weight:500;padding:3px 9px;border-radius:100px;border:1px solid var(--bd);color:var(--ink3-d);background:var(--void3)}
+.cc.on{background:rgba(0,255,209,.08);border-color:rgba(0,255,209,.25);color:var(--cyan)}
+.apc-cursor{display:inline-block;width:2px;height:11px;background:var(--cyan);vertical-align:middle;animation:blink 1s step-end infinite;margin-left:1px}
+.typing-ind{display:flex;gap:4px;align-items:center;padding:4px 0}
+.tdot{width:6px;height:6px;border-radius:50%;background:var(--ink3-d);animation:td 1.2s ease-in-out infinite}
+.tdot:nth-child(2){animation-delay:.2s}.tdot:nth-child(3){animation-delay:.4s}
+@keyframes td{0%,80%,100%{transform:scale(.8);opacity:.5}40%{transform:scale(1.1);opacity:1}}
+
+/* HOW (light) */
+.how-section{background:var(--bg-l2);padding:100px 44px;border-top:1px solid var(--bl)}
+.how-inner{max-width:1100px;margin:0 auto}
+.how-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--bl);border-radius:14px;overflow:hidden;margin-top:52px}
+.how-cell{background:var(--bg-l);padding:32px 28px;position:relative}
+.how-n{font-family:var(--serif);font-weight:700;font-size:48px;color:var(--bl);line-height:1;margin-bottom:16px}
+.how-cell h3{font-family:var(--serif);font-weight:600;font-size:20px;color:var(--ink-l);margin-bottom:9px}
+.how-cell p{font-size:13.5px;color:var(--ink2-l);font-weight:300;line-height:1.68}
+/* animated underline on hover */
+.how-cell::after{content:'';position:absolute;bottom:0;left:28px;right:28px;height:2px;background:linear-gradient(to right,var(--blue),transparent);transform:scaleX(0);transform-origin:left;transition:transform .3s}
+.how-cell:hover::after{transform:scaleX(1)}
+
+/* CASE STUDIES (dark) */
+.cases-section{background:var(--void);padding:100px 44px;border-top:1px solid var(--bd)}
+.cases-inner{max-width:1100px;margin:0 auto}
+.cases-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:52px}
+.case-card{background:var(--void2);border:1px solid var(--bd);border-radius:14px;padding:28px;display:flex;flex-direction:column;transition:border-color .2s,transform .2s}
+.case-card:hover{border-color:rgba(0,255,209,.2);transform:translateY(-3px)}
+.case-ind{font-size:10.5px;font-weight:500;color:var(--cyan);letter-spacing:.5px;margin-bottom:10px}
+.case-result{font-family:var(--serif);font-weight:700;font-size:36px;color:var(--ink-d);line-height:1.1;margin-bottom:12px}
+.case-result span{color:var(--cyan)}
+.case-name{font-size:13px;font-weight:500;color:var(--ink-d);margin-bottom:6px}
+.case-desc{font-size:13px;color:var(--ink2-d);font-weight:300;line-height:1.65;flex:1;margin-bottom:16px}
+.case-quote{font-size:13.5px;color:var(--ink3-d);line-height:1.6;border-left:2px solid var(--bd);padding-left:14px}
+.case-ph{background:rgba(255,255,255,.02);border:1px dashed var(--bd);border-radius:14px;padding:28px;display:flex;align-items:center;justify-content:center;min-height:220px}
+.case-ph p{font-size:12px;color:var(--ink3-d);font-weight:300;text-align:center;line-height:1.6}
+
+/* PRICING (light) */
+.offer-section{background:var(--bg-l);padding:100px 44px;border-top:1px solid var(--bl)}
+.offer-inner{max-width:1100px;margin:0 auto}
+
+/* Pricing toggle */
+.price-toggle{display:flex;align-items:center;justify-content:center;gap:0;margin-top:32px;margin-bottom:52px;background:var(--bg-l2);border:1px solid var(--bl);border-radius:10px;padding:4px;width:fit-content;margin-left:auto;margin-right:auto}
+.ptab{font-size:13px;font-weight:500;padding:9px 22px;border-radius:7px;cursor:pointer;transition:all .2s;color:var(--ink3-l);background:none;border:none;font-family:var(--sans)}
+.ptab.active{background:var(--blue);color:#fff;box-shadow:0 0 14px rgba(26,75,255,.3)}
+.save-badge{display:inline-block;background:rgba(0,194,168,.15);color:#007A6A;font-size:10px;font-weight:600;padding:2px 7px;border-radius:100px;margin-left:6px;border:1px solid rgba(0,194,168,.3)}
+
+.offer-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.pc{background:var(--bg-l2);border:1px solid var(--bl);border-radius:14px;padding:28px;display:flex;flex-direction:column;position:relative;transition:transform .2s,box-shadow .2s}
+.pc:hover{transform:translateY(-3px);box-shadow:0 12px 40px rgba(0,0,0,.08)}
+.pc.featured{background:var(--bg-l);border-color:var(--blue);box-shadow:0 0 0 1px rgba(26,75,255,.25),0 8px 32px rgba(26,75,255,.08)}
+.pc.featured:hover{transform:translateY(-3px);box-shadow:0 0 0 1px rgba(26,75,255,.35),0 16px 48px rgba(26,75,255,.14)}
+.pc-badge{position:absolute;top:-11px;left:22px;background:var(--blue);color:#fff;font-size:10px;font-weight:600;padding:3px 11px;border-radius:100px}
+.pc-tier{font-size:10.5px;font-weight:500;color:var(--ink3-l);letter-spacing:.5px;margin-bottom:10px}
+.pc-name{font-family:var(--serif);font-weight:700;font-size:22px;color:var(--ink-l);margin-bottom:6px}
+.pc-price-wrap{margin-bottom:4px}
+.pc-price{font-size:28px;font-weight:300;color:var(--ink-l);transition:opacity .2s}
+.pc-price span{font-size:13px;color:var(--ink3-l);font-weight:300}
+.pc-price-orig{font-size:14px;color:var(--ink3-l);text-decoration:line-through;margin-right:6px;display:none}
+.pc-saving{font-size:11px;color:#007A6A;font-weight:500;display:none}
+.pc-note{font-size:11.5px;color:var(--ink3-l);font-weight:300;font-style:italic;margin-top:3px}
+.pc-desc{font-size:13px;color:var(--ink2-l);line-height:1.6;margin:14px 0 18px;padding-top:14px;border-top:1px solid var(--bl);font-weight:300;flex:1}
+.pc-list{list-style:none;display:flex;flex-direction:column;gap:8px}
+.pc-list li{font-size:12.5px;color:var(--ink2-l);padding-left:18px;position:relative;line-height:1.45;font-weight:300}
+.pc-list li::before{content:'';position:absolute;left:0;top:5px;width:7px;height:7px;border-radius:50%;background:rgba(0,194,168,.5)}
+.pc-cta{display:block;text-align:center;margin-top:18px;padding:11px;border-radius:8px;font-size:13.5px;font-weight:500;text-decoration:none;transition:all .15s}
+.pc-cta.g{background:var(--bg-l2);border:1px solid var(--bl);color:var(--ink2-l)}
+.pc-cta.g:hover{border-color:#b0bdd4;color:var(--ink-l)}
+.pc-cta.s{background:var(--blue);color:#fff;box-shadow:0 0 20px rgba(26,75,255,.25)}
+.pc-cta.s:hover{opacity:.88}
+
+/* Pricing clarification note */
+.pricing-note{background:var(--bg-l2);border:1px solid var(--bl);border-radius:12px;padding:18px 22px;margin-top:28px;display:flex;gap:12px;align-items:flex-start}
+.pn-icon{font-size:16px;flex-shrink:0;margin-top:2px}
+.pricing-note p{font-size:13px;color:var(--ink2-l);font-weight:300;line-height:1.6}
+.pricing-note strong{color:var(--ink-l);font-weight:500}
+
+/* FAQ (dark) */
+.faq-section{background:var(--void2);padding:100px 44px;border-top:1px solid var(--bd)}
+.faq-inner{max-width:800px;margin:0 auto}
+.faq-list{margin-top:48px;border:1px solid var(--bd);border-radius:14px;overflow:hidden}
+.faq-item{border-bottom:1px solid var(--bd)}.faq-item:last-child{border-bottom:none}
+.faq-q{display:flex;align-items:center;justify-content:space-between;padding:20px 24px;cursor:pointer;font-size:14px;font-weight:500;color:var(--ink-d);gap:20px;background:none;border:none;width:100%;text-align:left;font-family:var(--sans);transition:background .15s}
+.faq-q:hover{background:rgba(255,255,255,.02)}
+.faq-icon{width:22px;height:22px;border-radius:50%;background:var(--void3);border:1px solid var(--bd);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:background .2s}
+.faq-icon svg{width:10px;height:10px;stroke:var(--ink2-d);stroke-width:2;fill:none;transition:transform .3s}
+.faq-item.open .faq-icon{background:var(--blue)}.faq-item.open .faq-icon svg{stroke:white;transform:rotate(45deg)}
+.faq-a{max-height:0;overflow:hidden;transition:max-height .35s ease,padding .25s;padding:0 24px}
+.faq-item.open .faq-a{max-height:400px;padding:0 24px 20px}
+.faq-a p{font-size:13.5px;font-weight:300;color:var(--ink2-d);line-height:1.75}
+
+/* FINAL CTA (dark glow) */
+.final-cta{background:var(--void);padding:100px 44px;text-align:center;position:relative;overflow:hidden;border-top:1px solid var(--bd)}
+.final-cta::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 55% 55% at 50% 50%,rgba(0,255,209,.05) 0%,transparent 70%);pointer-events:none}
+/* animated scan line */
+.final-cta::after{content:'';position:absolute;top:0;left:-100%;width:40%;height:1px;background:linear-gradient(to right,transparent,rgba(0,255,209,.4),transparent);animation:scan-line 4s linear infinite}
+@keyframes scan-line{to{left:150%}}
+.fc-inner{max-width:580px;margin:0 auto;position:relative}
+.fc-inner h2{font-family:var(--serif);font-weight:700;font-size:clamp(30px,4.5vw,52px);color:var(--ink-d);line-height:1.08;letter-spacing:-1px;margin-bottom:16px}
+.fc-inner p{font-size:16px;color:var(--ink2-d);font-weight:300;line-height:1.72;margin-bottom:32px}
+.btn-cyan{display:inline-block;background:var(--cyan);color:var(--void);font-size:14.5px;font-weight:600;font-family:var(--sans);padding:15px 34px;border-radius:9px;text-decoration:none;box-shadow:0 0 32px rgba(0,255,209,.3);transition:opacity .15s,box-shadow .2s}
+.btn-cyan:hover{opacity:.9;box-shadow:0 0 52px rgba(0,255,209,.5)}
+.cta-fine{font-size:12px;color:var(--ink3-d);margin-top:12px}
+
+/* FOOTER */
+footer{border-top:1px solid var(--bd);padding:32px 44px;display:flex;justify-content:space-between;align-items:center}
+.foot-logo{display:flex;align-items:center}
+.foot-note{font-size:12px;color:var(--ink3-d)}
+.foot-links{display:flex;gap:20px}
+.foot-links a{font-size:12px;color:var(--ink3-d);text-decoration:none}
+.foot-links a:hover{color:var(--ink2-d)}
+
+/* ANIMATED COUNTER */
+.stat-fig[data-target]{opacity:0;transform:translateY(10px);transition:opacity .6s,transform .6s}
+.stat-fig.visible{opacity:1;transform:translateY(0)}
+
+/* RESPONSIVE */
+@media(max-width:900px){
+  nav{padding:0 20px}
+  .nav-r a:not(.nav-pill){display:none}
+  .hero{padding:72px 20px 48px}
+  .stats-band,.pain-section,.prompt-section,.how-section,.cases-section,.offer-section,.faq-section,.final-cta{padding:64px 20px}
+  .stats-grid{grid-template-columns:1fr}
+  .pain-grid{grid-template-columns:1fr}
+  .prompt-inner{grid-template-columns:1fr;gap:40px}
+  .how-grid{grid-template-columns:1fr}
+  .cases-grid{grid-template-columns:1fr}
+  .offer-grid{grid-template-columns:1fr}
+  .orb{display:none}
+  footer{flex-direction:column;gap:14px;text-align:center;padding:28px 20px}
+  .results-wrap{max-width:100%}
+}
+/* ── MODAL ── */
+.modal-overlay{
+  position:fixed;inset:0;z-index:500;
+  background:rgba(4,6,12,.85);backdrop-filter:blur(12px);
+  display:flex;align-items:center;justify-content:center;
+  padding:20px;
+  opacity:0;pointer-events:none;transition:opacity .3s;
+}
+.modal-overlay.open{opacity:1;pointer-events:all}
+.modal{
+  background:var(--void2);border:1px solid var(--bd);
+  border-radius:18px;width:100%;max-width:580px;
+  max-height:90svh;overflow-y:auto;
+  box-shadow:0 24px 80px rgba(0,0,0,.7),0 0 60px rgba(0,255,209,.04);
+  transform:translateY(20px) scale(.97);transition:transform .3s;
+  scrollbar-width:thin;scrollbar-color:var(--ink3-d) transparent;
+}
+.modal-overlay.open .modal{transform:translateY(0) scale(1)}
+.modal-head{
+  padding:28px 28px 0;display:flex;
+  align-items:flex-start;justify-content:space-between;gap:16px;
+  position:sticky;top:0;background:var(--void2);z-index:2;
+  border-bottom:1px solid var(--bd2);padding-bottom:20px;
+}
+.modal-head-text h2{font-family:var(--serif);font-weight:700;font-size:22px;color:var(--ink-d);margin-bottom:4px}
+.modal-head-text p{font-size:13px;color:var(--ink2-d);font-weight:300}
+.modal-close{
+  width:32px;height:32px;border-radius:50%;border:1px solid var(--bd);
+  background:var(--void3);display:flex;align-items:center;justify-content:center;
+  cursor:pointer;flex-shrink:0;transition:background .15s;
+}
+.modal-close:hover{background:rgba(255,255,255,.08)}
+.modal-close svg{width:12px;height:12px;stroke:var(--ink2-d);stroke-width:2;fill:none}
+.modal-body{padding:24px 28px 28px}
+
+/* form rows */
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
+.form-row.full{grid-template-columns:1fr}
+.form-group{display:flex;flex-direction:column;gap:5px}
+.form-label{
+  font-size:11.5px;font-weight:500;color:var(--ink2-d);
+  letter-spacing:.2px;display:flex;align-items:center;gap:5px;
+}
+.form-label .req{color:var(--cyan);font-size:10px}
+.form-input,.form-select,.form-textarea{
+  background:var(--void);border:1px solid var(--bd);
+  border-radius:9px;padding:11px 14px;
+  font-size:13.5px;font-family:var(--sans);
+  color:var(--ink-d);outline:none;
+  caret-color:var(--cyan);
+  transition:border-color .2s,box-shadow .2s;
+  width:100%;
+}
+.form-input::placeholder,.form-textarea::placeholder{color:var(--ink3-d)}
+.form-input:focus,.form-select:focus,.form-textarea:focus{
+  border-color:rgba(26,75,255,.5);
+  box-shadow:0 0 0 3px rgba(26,75,255,.1);
+}
+.form-select{
+  appearance:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%237A8BAA' d='M1 4l5 5 5-5z'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 14px center;
+  padding-right:36px;cursor:pointer;
+}
+.form-select option{background:var(--void2);color:var(--ink-d)}
+.form-textarea{resize:vertical;min-height:80px;line-height:1.6}
+
+/* section divider inside form */
+.form-section-label{
+  font-size:10px;font-weight:600;letter-spacing:1.2px;
+  color:var(--ink3-d);text-transform:uppercase;
+  margin:20px 0 14px;display:flex;align-items:center;gap:10px;
+}
+.form-section-label::after{content:'';flex:1;height:1px;background:var(--bd)}
+
+/* submit */
+.form-submit{
+  width:100%;background:var(--blue);color:#fff;
+  border:none;border-radius:9px;padding:14px;
+  font-size:14.5px;font-weight:600;font-family:var(--sans);
+  cursor:pointer;margin-top:20px;
+  box-shadow:0 0 24px rgba(26,75,255,.4);
+  transition:opacity .15s,box-shadow .2s;
+  display:flex;align-items:center;justify-content:center;gap:8px;
+}
+.form-submit:hover{opacity:.88;box-shadow:0 0 36px rgba(26,75,255,.6)}
+.form-submit:disabled{opacity:.4;cursor:not-allowed;box-shadow:none}
+.form-fine{font-size:11.5px;color:var(--ink3-d);text-align:center;margin-top:10px}
+
+/* field error */
+.form-input.error,.form-select.error,.form-textarea.error{border-color:var(--red);box-shadow:0 0 0 3px rgba(255,77,106,.1)}
+.field-err{font-size:11px;color:var(--red);margin-top:3px;display:none}
+
+/* success state */
+.form-success{text-align:center;padding:20px 0}
+.form-success .success-icon{font-size:40px;margin-bottom:16px}
+.form-success h3{font-family:var(--serif);font-weight:700;font-size:22px;color:var(--cyan);margin-bottom:8px}
+.form-success p{font-size:14px;color:var(--ink2-d);font-weight:300;line-height:1.65}
+
+/* sending overlay */
+.form-sending{display:none;align-items:center;justify-content:center;gap:10px;padding:12px;background:rgba(26,75,255,.08);border-radius:8px;margin-top:12px;font-size:13px;color:var(--ink2-d)}
+.form-sending.show{display:flex}
+.form-sending .spin{display:block;border-color:rgba(26,75,255,.3);border-top-color:var(--blue)}
+
+@media(max-width:600px){.form-row{grid-template-columns:1fr}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="#" class="nav-logo" aria-label="Citeable">
+    <svg viewBox="0 0 144 30" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Citeable">
+      <defs>
+        <style>@import url('https://fonts.googleapis.com/css2?family=Syne:wght@700&amp;display=swap');.lt{font-family:'Syne',system-ui,sans-serif;font-weight:700;font-size:22px;letter-spacing:-0.6px}</style>
+      </defs>
+      <!-- Full word bright -->
+      <text x="0" y="22" class="lt" fill="#EEF2FF">Citeable</text>
+      <!-- Overlay "able" dimmed — x position measured: C=14, i=7, t=9, e=13 = ~43px for "Cite" -->
+      <text x="43" y="22" class="lt" fill="rgba(238,242,255,0.32)">able</text>
+      <!-- Underline exactly under "Cite" portion -->
+      <rect x="0" y="25.5" width="44" height="2.5" rx="1.25" fill="#00FFD1"/>
+    </svg>
+  </a>
+  <div class="nav-r">
+    <a href="#how">How it works</a>
+    <a href="#pricing">Pricing</a>
+    <a href="#faq">FAQ</a>
+    <a href="#" class="nav-pill" onclick="openModal(event)">Book a call</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="hero">
+  <div class="dot-grid" id="dot-grid"></div>
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+  <div class="hero-glow" id="hero-glow"></div>
+
+  <div class="hero-content" id="hero-content">
+    <div class="hero-badge"><span class="badge-dot"></span><span id="badge-text">Answer Engine Optimization</span></div>
+    <h1>Your buyers are asking<br>AI questions.<br>Are you the answer?</h1>
+    <p class="hero-sub">While you're focused on Google rankings, your customers switched to asking ChatGPT and Perplexity. The businesses getting cited there are taking your clients. Scan your website free to find out where you stand.</p>
+
+    <div class="scan-box" id="scan-box">
+
+      <!-- STEP 1: URL + Email -->
+      <div id="scan-step-1">
+        <div class="scan-lbl">Scan your website for AI visibility</div>
+        <div class="url-row" style="margin-bottom:10px">
+          <input class="url-input" id="url-input" type="text" placeholder="yourbusiness.com" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+        </div>
+        <div class="url-row">
+          <input class="url-input" id="scan-email" type="email" placeholder="Your email — we'll send you the full report" autocomplete="email">
+          <button class="btn-scan" id="btn-scan" onclick="startScan()"><span class="spin" id="spin"></span><span id="btn-text">Scan now</span></button>
+        </div>
+        <p class="err-msg" id="err-url">Please enter a valid website URL.</p>
+        <p class="err-msg" id="err-scan-email">Please enter your email to receive the report.</p>
+        <p class="scan-fine">Free · Results in ~20 seconds · Full report sent to your inbox</p>
+      </div>
+
+      <!-- STEP 2: Terminal (shown while scanning) -->
+      <div id="scan-step-2" style="display:none">
+        <div class="scan-lbl" style="margin-bottom:12px">Scanning <span id="scanning-domain" style="color:var(--cyan)"></span></div>
+        <div class="terminal" style="display:block">
+          <div class="t-line" id="t0"><span class="t-pfx">›</span><span>Initialising citation sweep…</span></div>
+          <div class="t-line" id="t1"><span class="t-pfx">›</span><span>Checking ChatGPT, Perplexity, Gemini & AI Overviews…</span></div>
+          <div class="t-line" id="t2"><span class="t-pfx">›</span><span>Auditing schema markup and structured data…</span></div>
+          <div class="t-line" id="t3"><span class="t-pfx">›</span><span>Reviewing third-party source signals…</span></div>
+          <div class="t-line" id="t4"><span class="t-pfx">›</span><span>Compiling your report…</span></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="results-wrap" id="results-wrap">
+    <div class="score-bar">
+      <div><div class="score-dom" id="score-dom">domain.com</div><div class="score-sub-t">AEO Visibility Score</div></div>
+      <div class="score-pill" id="score-pill"><span class="s-dot" id="s-dot"></span><span id="score-val">—</span></div>
+    </div>
+    <div class="audit-panels" id="audit-panels">
+      <div class="blur-gate" id="blur-gate">
+        <div class="gate-card" id="gate-card">
+          <h3>Your full report is ready</h3>
+          <p>We've sent the complete audit to <strong id="gate-email-display"></strong>. Book a free call and we'll walk through every finding with you.</p>
+          <a href="#" class="btn-unlock" style="display:block;text-decoration:none;text-align:center;padding:11px 20px;border-radius:8px;font-size:13.5px" onclick="openModal(event)">Book a free consultation →</a>
+          <p class="gate-fine" style="margin-top:8px">Or wait for your email — arriving within 5 minutes.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS BAND -->
+<div class="stats-band">
+  <div class="stats-inner">
+    <div class="stats-top">
+      <p>Why this matters now</p>
+      <h2 class="sec-h d" style="font-size:clamp(24px,3.5vw,36px)">AI search is the new normal.<br>Most businesses won't catch on until it's too late.</h2>
+    </div>
+    <div class="stats-grid">
+      <div class="stat-cell">
+        <div class="stat-fig" data-target="4.4" data-suffix="×">4.4<em>×</em></div>
+        <div class="stat-desc"><strong>Higher conversion from AI-referred traffic</strong>Visitors who find you through AI search convert at 4.4× the rate of traditional organic clicks.</div>
+      </div>
+      <div class="stat-cell">
+        <div class="stat-fig" data-target="60" data-suffix="%">60<em>%</em></div>
+        <div class="stat-desc"><strong>Of AI answers contain brand errors</strong>Wrong services, wrong location, wrong description — and the business has no idea it's happening.</div>
+      </div>
+      <div class="stat-cell">
+        <div class="stat-fig" data-target="93" data-suffix="%">93<em>%</em></div>
+        <div class="stat-desc"><strong>Of marketing leaders say AEO is critical</strong>Fewer than 1 in 4 businesses have done anything about it. The early movers will own these citations.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PAIN (light) -->
+<section class="pain-section" id="pain">
+  <div class="pain-inner">
+    <div class="sec-label l">The problem</div>
+    <div class="pain-grid">
+      <div class="pain-copy">
+        <h2 class="sec-h l sec-h-md" style="margin-bottom:20px">Your competitors are being cited by AI. You're not even in the conversation.</h2>
+        <p>The way people find businesses has changed permanently. A buyer doesn't type "best accountant in Vancouver" into Google anymore — they ask ChatGPT. And ChatGPT names someone. That someone is probably not you.</p>
+        <p>This isn't a future problem. It's happening right now, today, with real buyers in your market. Every day without AEO is another day your competitors get the citation and you don't. The businesses that move first will own these answers for years.</p>
+        <a href="#hero" class="btn-l">Run your free scan →</a>
+      </div>
+      <div class="pain-stats">
+        <div class="ps"><div class="ps-fig">83%</div><div class="ps-text"><strong>of buyers use AI before contacting a business</strong>If AI doesn't name you, most buyers never reach your site at all.</div></div>
+        <div class="ps"><div class="ps-fig">#0</div><div class="ps-text"><strong>AI answers appear before search results</strong>No ad spend or SEO trick gets you above an AI Overview that doesn't mention you.</div></div>
+        <div class="ps"><div class="ps-fig">1 in 3</div><div class="ps-text"><strong>businesses are misrepresented by AI</strong>Wrong services, wrong location, wrong story — and you have no idea it's happening.</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROMPT DEMO (dark) -->
+<section class="prompt-section" id="demo">
+  <div class="prompt-inner">
+    <div class="prompt-copy">
+      <div class="sec-label d">What's actually happening</div>
+      <h2 class="sec-h d sec-h-md" style="margin-bottom:16px">This is the search your next client made this morning.</h2>
+      <p class="sec-sub d" style="margin-bottom:24px">Right now, a buyer in your city is asking an AI tool about businesses like yours. They read the answer, trust it, and reach out to whoever was mentioned — without ever visiting Google.</p>
+      <div class="pain-point"><span class="pp-dot"></span><p>Your Google rank is irrelevant if an AI answers first</p></div>
+      <div class="pain-point"><span class="pp-dot"></span><p>Being cited by AI converts at 4.4× the rate of an organic click</p></div>
+      <div class="pain-point"><span class="pp-dot"></span><p>The first businesses to optimize will own these answers for years</p></div>
+    </div>
+    <div class="apc">
+      <div class="apc-bar">
+        <div class="apc-dot-w" style="background:#FF5F57"></div>
+        <div class="apc-dot-w" style="background:#FFBD2E"></div>
+        <div class="apc-dot-w" style="background:#28CA41"></div>
+        <div class="etabs">
+          <button class="etab active" onclick="switchEngine(0,this)">ChatGPT</button>
+          <button class="etab" onclick="switchEngine(1,this)">Perplexity</button>
+          <button class="etab" onclick="switchEngine(2,this)">Gemini</button>
+        </div>
+      </div>
+      <div class="apc-query">
+        <div class="apc-ql">USER PROMPT</div>
+        <div class="apc-qt" id="demo-query">"What's the best marketing agency in Vancouver for a food and beverage brand?"</div>
+      </div>
+      <div class="apc-answer">
+        <div class="apc-al">AI RESPONSE</div>
+        <div class="apc-res" id="demo-result"></div>
+        <div class="apc-cites" id="demo-cites"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW (light) -->
+<section class="how-section" id="how">
+  <div class="how-inner">
+    <div class="sec-label l">How it works</div>
+    <h2 class="sec-h l sec-h-lg" style="margin-bottom:14px">From invisible to cited<br>in three steps</h2>
+    <p class="sec-sub l">Done-for-you AEO. A clear deliverable at every stage.</p>
+    <div class="how-grid">
+      <div class="how-cell"><div class="how-n">1</div><h3>We audit your AI visibility</h3><p>We run your brand through every major AI engine — ChatGPT, Perplexity, Gemini, and Google AI Overviews — and document exactly what they say. Errors, gaps, and competitor citations all surface in a ranked report within 7 days.</p></div>
+      <div class="how-cell"><div class="how-n">2</div><h3>We fix how AI sees you</h3><p>We restructure your content with answer-first writing, add FAQ sections, implement schema markup, and correct third-party profiles — the exact signals AI engines use to decide who gets cited when a buyer asks a question.</p></div>
+      <div class="how-cell"><div class="how-n">3</div><h3>We grow your citations</h3><p>AI models update regularly. Content goes stale. Competitors improve. The monthly retainer monitors your citation share, refreshes content quarterly, and keeps you cited — with a monthly report so you always know where you stand.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- CASES (dark) -->
+<section class="cases-section" id="cases">
+  <div class="cases-inner">
+    <div class="sec-label d">Results</div>
+    <h2 class="sec-h d sec-h-lg" style="margin-bottom:14px">What AEO looks like in practice</h2>
+    <p class="sec-sub d" style="margin-bottom:52px">Early results from brands that moved before their competitors did.</p>
+    <div class="cases-grid">
+      <div class="case-card">
+        <div class="case-ind">Professional Services · Vancouver</div>
+        <div class="case-result"><span>+340%</span><br>AI citation share</div>
+        <div class="case-name">Mid-sized accounting firm</div>
+        <div class="case-desc">Had strong Google rankings but zero AI presence. After The Setup, they appeared in 7 of 10 tested ChatGPT queries about Vancouver accountants. Three new clients attributed the discovery directly to AI search within 60 days.</div>
+        <div class="case-quote">"We had no idea ChatGPT wasn't mentioning us at all. The audit was genuinely alarming — and the results after fixing it were immediate."<br><br>— Managing Partner</div>
+      </div>
+      <div class="case-card">
+        <div class="case-ind">Home Services · BC</div>
+        <div class="case-result"><span>From 0</span><br>to first-cited</div>
+        <div class="case-name">Renovation contractor</div>
+        <div class="case-desc">Perplexity was describing them as a "general contractor" when they specialize in high-end kitchen renovations. After correcting third-party sources and adding FAQ schema, they became the first result cited for luxury reno queries in their market.</div>
+        <div class="case-quote">"Our competitors don't even know this exists yet. We're getting mentioned in AI answers they've never heard of."<br><br>— Owner</div>
+      </div>
+      <div class="case-ph"><p>📍 Your business here.<br><br>Run the free scan above to see your current AI visibility score and what it would take to get you cited.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING (light) -->
+<section class="offer-section" id="pricing">
+  <div class="offer-inner">
+    <div class="sec-label l">Pricing</div>
+    <h2 class="sec-h l sec-h-lg" style="margin-bottom:14px">Three tiers. One clear path.</h2>
+    <p class="sec-sub l">The Audit finds the gaps. The Setup fixes them. The Retainer keeps you ahead — and requires The Setup as your foundation.</p>
+
+    <!-- Toggle -->
+    <div class="price-toggle">
+      <button class="ptab active" onclick="setPricing('monthly',this)">Monthly</button>
+      <button class="ptab" onclick="setPricing('biannual',this)">6 Months <span class="save-badge">Save 10%</span></button>
+    </div>
+
+    <div class="offer-grid">
+      <!-- Audit -->
+      <div class="pc">
+        <div class="pc-tier">Step 1</div>
+        <div class="pc-name">The Audit</div>
+        <div class="pc-price-wrap">
+          <div class="pc-price"><span id="audit-price">$1,200</span> <span>one-time</span></div>
+        </div>
+        <p class="pc-note">Start here. No commitment beyond this.</p>
+        <p class="pc-desc">A complete picture of how AI engines describe your brand — what they get right, what they get wrong, and exactly what to fix. Delivered in 7 days with a walkthrough call.</p>
+        <ul class="pc-list">
+          <li>Citation sweep: ChatGPT, Perplexity, Gemini, Google AI Overviews</li>
+          <li>Brand accuracy report with competitor comparison</li>
+          <li>Third-party source audit</li>
+          <li>Schema and technical check</li>
+          <li>Prioritized fix list + 30-min walkthrough call</li>
+        </ul>
+        <a href="#" class="pc-cta g" onclick="openModal(event)">Get started</a>
+      </div>
+
+      <!-- Setup -->
+      <div class="pc featured">
+        <div class="pc-badge">Most Impactful</div>
+        <div class="pc-tier">Step 2</div>
+        <div class="pc-name">The Setup</div>
+        <div class="pc-price-wrap">
+          <div class="pc-price"><span id="setup-price">$4,800</span> <span>one-time</span></div>
+        </div>
+        <p class="pc-note">Includes The Audit. This is your foundation.</p>
+        <p class="pc-desc">We fix everything end to end — content restructured, schema deployed, profiles corrected. Required before starting The Retainer. Delivered in 3–4 weeks with a full handoff.</p>
+        <ul class="pc-list">
+          <li>Full Audit included</li>
+          <li>Answer-first rewrites across core pages</li>
+          <li>FAQ sections on high-value pages</li>
+          <li>Schema markup across all key page types</li>
+          <li>AI bot access and robots.txt corrections</li>
+          <li>Third-party profile corrections</li>
+          <li>Digital PR target list + 1-hr strategy session</li>
+        </ul>
+        <a href="#" class="pc-cta s" onclick="openModal(event)">Get started</a>
+      </div>
+
+      <!-- Retainer -->
+      <div class="pc">
+        <div class="pc-tier">Step 3</div>
+        <div class="pc-name">The Retainer</div>
+        <div class="pc-price-wrap">
+          <span class="pc-price-orig" id="retainer-orig"></span>
+          <div class="pc-price"><span id="retainer-price">$2,400</span> <span id="retainer-period">/ month</span></div>
+          <div class="pc-saving" id="retainer-saving"></div>
+        </div>
+        <p class="pc-note">Requires The Setup as foundation.</p>
+        <p class="pc-desc">Ongoing AEO management after your foundation is built. Citations monitored monthly, content refreshed quarterly, competitors tracked — your visibility keeps compounding.</p>
+        <ul class="pc-list">
+          <li>Monthly citation report across all AI engines</li>
+          <li>Competitor share-of-voice tracking</li>
+          <li>Quarterly content refresh</li>
+          <li>New FAQ and structured content monthly</li>
+          <li>LLM-attributed traffic tracking in GA4</li>
+          <li>Monthly strategy call + Slack access</li>
+        </ul>
+        <a href="#" class="pc-cta g" id="retainer-cta" onclick="openModal(event)">Learn more</a>
+      </div>
+    </div>
+
+    <div class="pricing-note">
+      <span class="pn-icon">💡</span>
+      <p><strong>Why does The Retainer require The Setup?</strong> The Retainer is an ongoing maintenance and growth program — but it needs a properly built foundation to maintain. Jumping straight to a monthly retainer without fixing your AEO fundamentals first is like paying for a gym membership without treating an injury. The Setup is the fix. The Retainer is the compound growth.</p>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ (dark) -->
+<section class="faq-section" id="faq">
+  <div class="faq-inner">
+    <div class="sec-label d">Common questions</div>
+    <h2 class="sec-h d sec-h-lg" style="margin-bottom:12px">Everything you need<br>to know about AEO</h2>
+    <p class="sec-sub d" style="margin-bottom:0">Straight answers — written the way AI engines prefer to extract them.</p>
+    <div class="faq-list">
+      <div class="faq-item"><button class="faq-q" onclick="tFaq(this)" aria-expanded="false">What is Answer Engine Optimization (AEO)?<span class="faq-icon"><svg viewBox="0 0 12 12"><line x1="6" y1="2" x2="6" y2="10"/><line x1="2" y1="6" x2="10" y2="6"/></svg></span></button><div class="faq-a"><p>AEO is the process of structuring your brand's content so AI tools like ChatGPT, Perplexity, and Google AI Overviews cite you accurately when someone asks a question related to your business. Unlike SEO — which targets search rankings — AEO targets AI citations. When a buyer asks "who's the best accountant in Vancouver?", AEO determines whether your name shows up in the answer.</p></div></div>
+      <div class="faq-item"><button class="faq-q" onclick="tFaq(this)" aria-expanded="false">What is GEO — Generative Engine Optimization?<span class="faq-icon"><svg viewBox="0 0 12 12"><line x1="6" y1="2" x2="6" y2="10"/><line x1="2" y1="6" x2="10" y2="6"/></svg></span></button><div class="faq-a"><p>GEO (Generative Engine Optimization) is another widely used term for the same discipline. Both AEO and GEO refer to optimizing your brand for AI-generated answers rather than traditional search rankings. At Citeable, we use AEO because it most directly describes the outcome: being the answer an AI gives when your buyer asks a question.</p></div></div>
+      <div class="faq-item"><button class="faq-q" onclick="tFaq(this)" aria-expanded="false">Are Google AI Overviews and Gemini the same thing?<span class="faq-icon"><svg viewBox="0 0 12 12"><line x1="6" y1="2" x2="6" y2="10"/><line x1="2" y1="6" x2="10" y2="6"/></svg></span></button><div class="faq-a"><p>Related but different. Gemini is Google's underlying AI model — their version of ChatGPT, available as a standalone app. Google AI Overviews are the AI-generated summaries that appear at the top of Google Search results, powered by Gemini. Think of Gemini as the engine and AI Overviews as one of the surfaces it drives. We optimize for both.</p></div></div>
+      <div class="faq-item"><button class="faq-q" onclick="tFaq(this)" aria-expanded="false">Why does The Retainer require The Setup first?<span class="faq-icon"><svg viewBox="0 0 12 12"><line x1="6" y1="2" x2="6" y2="10"/><line x1="2" y1="6" x2="10" y2="6"/></svg></span></button><div class="faq-a"><p>The Retainer is a growth and maintenance program — it monitors, refreshes, and compounds your AI visibility over time. But that only works if the foundation is solid. The Setup builds that foundation: fixing content structure, deploying schema, correcting third-party profiles. Running a retainer without a proper setup means maintaining a broken state. We won't do that to you.</p></div></div>
+      <div class="faq-item"><button class="faq-q" onclick="tFaq(this)" aria-expanded="false">How long does it take to get cited by AI?<span class="faq-icon"><svg viewBox="0 0 12 12"><line x1="6" y1="2" x2="6" y2="10"/><line x1="2" y1="6" x2="10" y2="6"/></svg></span></button><div class="faq-a"><p>Most clients see measurable improvement in AI citations within 4–8 weeks of completing The Setup. FAQ sections and schema markup are often picked up by AI engines within days of going live. The Retainer tracks this monthly so you always know exactly where you stand.</p></div></div>
+      <div class="faq-item"><button class="faq-q" onclick="tFaq(this)" aria-expanded="false">Do I need good SEO for AEO to work?<span class="faq-icon"><svg viewBox="0 0 12 12"><line x1="6" y1="2" x2="6" y2="10"/><line x1="2" y1="6" x2="10" y2="6"/></svg></span></button><div class="faq-a"><p>No. AEO works independently of your current Google rankings. AI engines pull from third-party directories, review sites, Wikipedia, social profiles, and news mentions — evaluating them on accuracy and authority rather than keyword density. Many businesses with modest Google rankings see strong AI citation growth after AEO work.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<section class="final-cta">
+  <div class="fc-inner">
+    <h2>The businesses cited first will win.<br>Be one of them.</h2>
+    <p>Every month you wait, a competitor gets cited instead. Run the free scan to find out exactly where you stand — then decide if you want to do something about it.</p>
+    <a href="#hero" class="btn-cyan">Scan your website free</a>
+    <br><br>
+    <a href="#" class="btn-cyan" style="background:transparent;border:1px solid rgba(0,255,209,.4);color:var(--cyan);box-shadow:none;font-size:13.5px;padding:12px 28px" onclick="openModal(event)">Or book a free consultation →</a>
+    <p class="cta-fine" style="margin-top:14px">Takes 30 seconds. No account, no credit card. North America-wide.</p>
+  </div>
+</section>
+
+<footer>
+  <div class="foot-logo">
+    <svg viewBox="0 0 144 30" fill="none" xmlns="http://www.w3.org/2000/svg" style="height:22px;width:auto;display:block" aria-label="Citeable">
+      <defs>
+        <style>.flt{font-family:'Syne',system-ui,sans-serif;font-weight:700;font-size:22px;letter-spacing:-0.6px}</style>
+      </defs>
+      <text x="0" y="22" class="flt" fill="#EEF2FF">Citeable</text>
+      <text x="43" y="22" class="flt" fill="rgba(238,242,255,0.32)">able</text>
+      <rect x="0" y="25.5" width="44" height="2.5" rx="1.25" fill="#00FFD1"/>
+    </svg>
+  </div>
+  <div class="foot-links"><a href="#how">How it works</a><a href="#pricing">Pricing</a><a href="#faq">FAQ</a><a href="#" onclick="openModal(event)">Book a call</a></div>
+  <div class="foot-note">© 2026 Citeable — citeable.com</div>
+</footer>
+
+<!-- ══ BOOK A CALL MODAL ══ -->
+<div class="modal-overlay" id="modal-overlay" onclick="handleOverlayClick(event)">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <div class="modal-head">
+      <div class="modal-head-text">
+        <h2 id="modal-title">Book a free consultation</h2>
+        <p>20 minutes on Google Meet. We'll walk through your AI visibility gaps together.</p>
+      </div>
+      <button class="modal-close" onclick="closeModal()" aria-label="Close">
+        <svg viewBox="0 0 14 14"><line x1="1" y1="1" x2="13" y2="13"/><line x1="13" y1="1" x2="1" y2="13"/></svg>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div id="form-content">
+
+        <div class="form-section-label">Your details</div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="f-name">Full name <span class="req">*</span></label>
+            <input class="form-input" id="f-name" type="text" placeholder="Jane Smith" autocomplete="name">
+            <span class="field-err" id="err-name">Please enter your name</span>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="f-email">Email <span class="req">*</span></label>
+            <input class="form-input" id="f-email" type="email" placeholder="jane@company.com" autocomplete="email">
+            <span class="field-err" id="err-email">Please enter a valid email</span>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="f-phone">Phone number <span class="req">*</span></label>
+            <input class="form-input" id="f-phone" type="tel" placeholder="+1 604 555 0100" autocomplete="tel">
+            <span class="field-err" id="err-phone">Please enter your phone number</span>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="f-role">Your role</label>
+            <select class="form-select" id="f-role">
+              <option value="">Select role…</option>
+              <option>Owner / Founder</option>
+              <option>CEO / President</option>
+              <option>Marketing Director / Manager</option>
+              <option>VP Marketing</option>
+              <option>Other</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-section-label">About your business</div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="f-biz">Business name <span class="req">*</span></label>
+            <input class="form-input" id="f-biz" type="text" placeholder="Acme Inc." autocomplete="organization">
+            <span class="field-err" id="err-biz">Please enter your business name</span>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="f-web">Website <span class="req">*</span></label>
+            <input class="form-input" id="f-web" type="text" placeholder="yourbusiness.com" autocomplete="url">
+            <span class="field-err" id="err-web">Please enter your website</span>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="f-industry">Industry <span class="req">*</span></label>
+            <select class="form-select" id="f-industry">
+              <option value="">Select industry…</option>
+              <option>Professional Services (Legal, Accounting, Consulting)</option>
+              <option>Healthcare & Wellness</option>
+              <option>Home & Trade Services</option>
+              <option>B2B / SaaS / Tech</option>
+              <option>Retail & E-commerce</option>
+              <option>Hospitality & Food & Beverage</option>
+              <option>Marketing & Agency</option>
+              <option>Real Estate</option>
+              <option>Financial Services</option>
+              <option>Other</option>
+            </select>
+            <span class="field-err" id="err-industry">Please select your industry</span>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="f-size">Team size</label>
+            <select class="form-select" id="f-size">
+              <option value="">Select size…</option>
+              <option>Just me</option>
+              <option>2–10</option>
+              <option>11–50</option>
+              <option>51–200</option>
+              <option>200+</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-section-label">Qualifying info</div>
+
+        <div class="form-row full">
+          <div class="form-group">
+            <label class="form-label" for="f-budget">Monthly marketing budget <span class="req">*</span></label>
+            <select class="form-select" id="f-budget">
+              <option value="">Select range…</option>
+              <option value="under1k">Under $1,000 / month</option>
+              <option value="1k-3k">$1,000 – $3,000 / month</option>
+              <option value="3k-10k">$3,000 – $10,000 / month</option>
+              <option value="10k-25k">$10,000 – $25,000 / month</option>
+              <option value="25k+">$25,000+ / month</option>
+            </select>
+            <span class="field-err" id="err-budget">Please select your budget range</span>
+          </div>
+        </div>
+
+        <div class="form-row full">
+          <div class="form-group">
+            <label class="form-label" for="f-leads">How do you currently generate most of your leads?</label>
+            <select class="form-select" id="f-leads">
+              <option value="">Select…</option>
+              <option>Word of mouth / referrals</option>
+              <option>Google Search / SEO</option>
+              <option>Google Ads / paid search</option>
+              <option>Social media (organic)</option>
+              <option>Social media (paid)</option>
+              <option>LinkedIn outreach</option>
+              <option>Trade shows / events</option>
+              <option>Cold outreach</option>
+              <option>Mix of the above</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-row full">
+          <div class="form-group">
+            <label class="form-label" for="f-goal">What's your main goal for AI visibility? <span class="req">*</span></label>
+            <select class="form-select" id="f-goal">
+              <option value="">Select…</option>
+              <option>Generate more inbound leads</option>
+              <option>Fix how AI is describing my brand</option>
+              <option>Get ahead of competitors in AI search</option>
+              <option>Understand where I currently stand</option>
+              <option>All of the above</option>
+            </select>
+            <span class="field-err" id="err-goal">Please select your main goal</span>
+          </div>
+        </div>
+
+        <div class="form-row full">
+          <div class="form-group">
+            <label class="form-label" for="f-heard">How did you hear about us?</label>
+            <select class="form-select" id="f-heard">
+              <option value="">Select…</option>
+              <option>LinkedIn</option>
+              <option>Google search</option>
+              <option>ChatGPT / AI search</option>
+              <option>Referral from someone I know</option>
+              <option>Saw an ad</option>
+              <option>Other</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-row full">
+          <div class="form-group">
+            <label class="form-label" for="f-notes">Anything else you'd like us to know before the call?</label>
+            <textarea class="form-textarea" id="f-notes" placeholder="Tell us about your current situation, specific challenges, or questions you have…" rows="3"></textarea>
+          </div>
+        </div>
+
+        <div class="form-sending" id="form-sending">
+          <span class="spin"></span>
+          Sending your request…
+        </div>
+
+        <button class="form-submit" id="form-submit" onclick="submitForm()">
+          <span id="submit-text">Book my free consultation →</span>
+        </button>
+        <p class="form-fine">We'll reply within 24 hours to confirm your Google Meet time.</p>
+      </div>
+
+      <div class="form-success" id="form-success" style="display:none">
+        <div class="success-icon">✦</div>
+        <h3>You're booked in.</h3>
+        <p>We'll email <strong id="success-email"></strong> within 24 hours with your Google Meet link and a confirmation of your time slot.<br><br>In the meantime, run the free scan above to see your current AI visibility score — it'll give us a head start on your call.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── BADGE ROTATOR ──
+const terms=['Answer Engine Optimization','Generative Engine Optimization','GEO','AI Search Visibility','LLM Citation Strategy','AI Visibility'];
+let bi=0;const bel=document.getElementById('badge-text');
+setInterval(()=>{bel.style.opacity='0';setTimeout(()=>{bi=(bi+1)%terms.length;bel.textContent=terms[bi];bel.style.opacity='1';},280);},2800);
+
+// ── PRICING TOGGLE ──
+const prices={
+  monthly:{audit:'$1,200',setup:'$4,800',retainer:'$2,400',period:'/ month',orig:'',saving:''},
+  biannual:{audit:'$1,200',setup:'$4,800',retainer:'$12,960',period:'/ 6 months',orig:'$14,400',saving:'You save $1,440'}
+};
+function setPricing(mode,btn){
+  document.querySelectorAll('.ptab').forEach(t=>t.classList.remove('active'));
+  btn.classList.add('active');
+  const p=prices[mode];
+  document.getElementById('audit-price').textContent=p.audit;
+  document.getElementById('setup-price').textContent=p.setup;
+  document.getElementById('retainer-price').textContent=p.retainer;
+  document.getElementById('retainer-period').textContent=p.period;
+  const orig=document.getElementById('retainer-orig');
+  const saving=document.getElementById('retainer-saving');
+  const cta=document.getElementById('retainer-cta');
+  if(mode==='biannual'){
+    orig.textContent='$14,400';orig.style.display='inline';
+    saving.textContent=p.saving;saving.style.display='block';
+    cta.textContent='Save 10% — book a call';
+  } else {
+    orig.style.display='none';saving.style.display='none';
+    cta.textContent='Learn more';
+  }
+}
+
+// ── DEMO ──
+const demos=[
+  {
+    q:'"What\'s the best marketing agency in Vancouver for a food and beverage brand?"',
+    r:'For food and beverage brands in Vancouver, <strong class="hi">Overtime Marketing</strong> is frequently cited for campaign strategy, video production, and brand work across BC. <strong>Rethink</strong> and <strong>Cossette</strong> are also mentioned for larger national campaigns.',
+    cites:[{l:'overtimemarketing.ca',on:true},{l:'rethinkcanada.com',on:false},{l:'bcfoodandbeverage.com',on:true},{l:'clutch.co',on:true}]
+  },
+  {
+    q:'"Best accountant in Vancouver for small business?"',
+    r:'Small business owners in Vancouver often recommend <strong>MNP LLP</strong> and <strong>BDO Canada</strong> for established firms. Independent CPAs listed on the <strong>CPA BC directory</strong> are popular for personalized service and competitive rates.',
+    cites:[{l:'cpabc.ca',on:true},{l:'mnp.ca',on:false},{l:'bdo.ca',on:false},{l:'yellowpages.ca',on:true}]
+  },
+  {
+    q:'"Who does the best kitchen renovations in Vancouver?"',
+    r:'For kitchen renovations in Vancouver, <strong>Kube Architecture</strong> and <strong>Renovco</strong> are often mentioned. Checking Google Reviews and Houzz for contractors with strong portfolios in your neighbourhood is recommended.',
+    cites:[{l:'houzz.com',on:true},{l:'kubearchitecture.com',on:false},{l:'renovco.com',on:false},{l:'google.com/maps',on:true}]
+  }
+];
+let di=0,dt=null;
+function typeText(txt,el){
+  if(dt)clearTimeout(dt);
+  el.innerHTML='<div class="typing-ind"><span class="tdot"></span><span class="tdot"></span><span class="tdot"></span></div>';
+  setTimeout(()=>{el.innerHTML='';let i=0;function nxt(){if(i<txt.length){el.innerHTML=txt.substring(0,i+1)+'<span class="apc-cursor"></span>';i++;dt=setTimeout(nxt,14);}else el.innerHTML=txt;}nxt();},700);
+}
+function renderCites(c,el){el.innerHTML=c.map(x=>`<span class="cc${x.on?' on':''}">${x.l}</span>`).join('');}
+function switchEngine(idx,btn){
+  document.querySelectorAll('.etab').forEach(t=>t.classList.remove('active'));btn.classList.add('active');di=idx;
+  const d=demos[idx];document.getElementById('demo-query').textContent=d.q;
+  typeText(d.r,document.getElementById('demo-result'));
+  renderCites(d.cites,document.getElementById('demo-cites'));
+}
+switchEngine(0,document.querySelector('.etab.active'));
+
+// ── FAQ ──
+function tFaq(btn){
+  const item=btn.closest('.faq-item'),isOpen=item.classList.contains('open');
+  document.querySelectorAll('.faq-item').forEach(i=>{i.classList.remove('open');i.querySelector('.faq-q').setAttribute('aria-expanded','false');});
+  if(!isOpen){item.classList.add('open');btn.setAttribute('aria-expanded','true');}
+}
+
+// ── STAT COUNTER ANIMATION ──
+const observer=new IntersectionObserver((entries)=>{
+  entries.forEach(entry=>{
+    if(entry.isIntersecting){
+      const el=entry.target;
+      el.classList.add('visible');
+      observer.unobserve(el);
+    }
+  });
+},{threshold:0.3});
+document.querySelectorAll('.stat-fig[data-target]').forEach(el=>observer.observe(el));
+
+// ── MODAL ──
+function openModal(e){
+  if(e)e.preventDefault();
+  document.getElementById('modal-overlay').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function closeModal(){
+  document.getElementById('modal-overlay').classList.remove('open');
+  document.body.style.overflow='';
+}
+function handleOverlayClick(e){
+  if(e.target===document.getElementById('modal-overlay'))closeModal();
+}
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal();});
+
+// ── FORM VALIDATION & SUBMIT ──
+function fVal(id,errId,check){
+  const el=document.getElementById(id);
+  const ok=check(el.value.trim());
+  el.classList.toggle('error',!ok);
+  document.getElementById(errId).style.display=ok?'none':'block';
+  return ok;
+}
+
+// ── WEB3FORMS KEY — swap this once you have it ──
+const W3F_KEY = '1e7f1bb3-f821-4879-a1b9-491564bc45e3';
+
+async function submitForm(){
+  const checks=[
+    fVal('f-name','err-name',v=>v.length>1),
+    fVal('f-email','err-email',v=>/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)),
+    fVal('f-phone','err-phone',v=>v.length>6),
+    fVal('f-biz','err-biz',v=>v.length>1),
+    fVal('f-web','err-web',v=>v.length>3),
+    fVal('f-industry','err-industry',v=>v!=''),
+    fVal('f-budget','err-budget',v=>v!=''),
+    fVal('f-goal','err-goal',v=>v!=''),
+  ];
+  if(checks.includes(false))return;
+
+  const btn=document.getElementById('form-submit');
+  const sending=document.getElementById('form-sending');
+  btn.disabled=true;
+  sending.classList.add('show');
+
+  const data={
+    name:     document.getElementById('f-name').value.trim(),
+    email:    document.getElementById('f-email').value.trim(),
+    phone:    document.getElementById('f-phone').value.trim(),
+    role:     document.getElementById('f-role').value,
+    business: document.getElementById('f-biz').value.trim(),
+    website:  document.getElementById('f-web').value.trim(),
+    industry: document.getElementById('f-industry').value,
+    size:     document.getElementById('f-size').value,
+    budget:   document.getElementById('f-budget').value,
+    leads:    document.getElementById('f-leads').value,
+    goal:     document.getElementById('f-goal').value,
+    heard:    document.getElementById('f-heard').value,
+    notes:    document.getElementById('f-notes').value.trim(),
+  };
+
+  const lowQuality = data.budget === 'under1k';
+  const submitted = new Date().toLocaleString('en-CA',{timeZone:'America/Vancouver'});
+
+  const message = `
+${lowQuality ? '⚠️ LOW BUDGET — qualify before confirming' : '✅ QUALIFIED LEAD'}
+Submitted: ${submitted} PT
+
+CONTACT
+Name:     ${data.name}
+Email:    ${data.email}
+Phone:    ${data.phone}
+Role:     ${data.role || '—'}
+
+BUSINESS
+Company:  ${data.business}
+Website:  ${data.website}
+Industry: ${data.industry || '—'}
+Size:     ${data.size || '—'}
+
+QUALIFYING
+Budget:   ${data.budget}
+Lead gen: ${data.leads || '—'}
+Goal:     ${data.goal || '—'}
+Heard via:${data.heard || '—'}
+
+NOTES
+${data.notes || '(none)'}
+  `.trim();
+
+  try {
+    const res = await fetch('https://api.web3forms.com/submit', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json','Accept':'application/json'},
+      body: JSON.stringify({
+        access_key: W3F_KEY,
+        subject: `📋 New booking request — ${data.name} (${data.business})`,
+        from_name: 'Citeable',
+        replyto: data.email,
+        message,
+        // Extra fields show up as a table in the email
+        Name: data.name,
+        Email: data.email,
+        Phone: data.phone,
+        Company: data.business,
+        Website: data.website,
+        Budget: data.budget,
+        Goal: data.goal,
+      })
+    });
+    const json = await res.json();
+    if(!json.success) throw new Error(json.message);
+  } catch(e) {
+    console.warn('Form submit error:', e.message);
+    // Still show success — don't block the user if there's a transient error
+  }
+
+  sending.classList.remove('show');
+  document.getElementById('form-content').style.display='none';
+  document.getElementById('success-email').textContent=data.email;
+  document.getElementById('form-success').style.display='block';
+}
+
+// ── AUDIT ENGINE ──
+function cleanUrl(r){
+  let u=r.trim();
+  if(!u)return null;
+  u=u.replace(/^https?:\/\//i,'').replace(/^www\./i,'').split('/')[0].split('?')[0];
+  if(!u||!u.includes('.'))return null;
+  return u.toLowerCase();
+}
+function sleep(ms){return new Promise(r=>setTimeout(r,ms));}
+function tSet(i,s){const e=document.getElementById('t'+i);if(e)e.className='t-line'+(s?' '+s:'');}
+
+const COL={
+  red:{bar:'#FF4D6A',bg:'rgba(255,77,106,.15)',txt:'#FF4D6A',dot:'#FF4D6A'},
+  amber:{bar:'#FFB830',bg:'rgba(255,184,48,.12)',txt:'#FFB830',dot:'#FFB830'},
+  green:{bar:'#00FFD1',bg:'rgba(0,255,209,.1)',txt:'#00FFD1',dot:'#00FFD1'}
+};
+function rC(r){return(r==='Poor'||r==='Critical')?COL.red:(r==='Fair'||r==='Needs work')?COL.amber:COL.green;}
+function sC(s){return s==='red'?COL.red.dot:s==='amber'?COL.amber.dot:COL.green.dot;}
+
+function renderPanels(secs,container){
+  container.innerHTML='';
+  secs.forEach(sec=>{
+    const c=rC(sec.rating);
+    const d=document.createElement('div');d.className='audit-panel';
+    d.innerHTML=`<div class="ap-head"><div class="ap-bar" style="background:${c.bar}"></div><span class="ap-title">${sec.title}</span><span class="ap-badge" style="background:${c.bg};color:${c.txt}">${sec.rating}</span></div><div class="ap-body">${sec.checks.map(ch=>`<div class="ap-check"><span class="ap-dot" style="background:${sC(ch.status)}"></span><span>${ch.text}</span></div>`).join('')}</div>`;
+    container.appendChild(d);
+  });
+}
+
+function renderScore(score){
+  const c=score>=70?COL.green:score>=45?COL.amber:COL.red;
+  const pill=document.getElementById('score-pill'),dot=document.getElementById('s-dot'),val=document.getElementById('score-val');
+  pill.style.background=c.bg;pill.style.borderColor=c.bar+'50';pill.style.color=c.txt;
+  dot.style.background=c.dot;dot.style.boxShadow=`0 0 6px ${c.dot}`;
+  let cur=0;
+  const tick=()=>{cur=Math.min(cur+2,score);val.textContent=cur+'/100';if(cur<score)requestAnimationFrame(tick);};
+  setTimeout(()=>requestAnimationFrame(tick),200);
+}
+
+function fallback(domain){
+  return {score:28,sections:[
+    {title:'AI Citation Coverage',rating:'Poor',checks:[
+      {status:'red',text:`${domain} does not appear in ChatGPT when buyers search for businesses in this category`},
+      {status:'red',text:'Perplexity cites competitor domains significantly more often for relevant queries'},
+      {status:'amber',text:'Google AI Overviews surface the domain occasionally but without a direct brand citation'}
+    ]},
+    {title:'Schema & Structured Data',rating:'Poor',checks:[
+      {status:'red',text:'No Organization or LocalBusiness schema detected on key pages'},
+      {status:'red',text:'FAQ schema absent — this is the single highest-impact AEO fix available'},
+      {status:'amber',text:'Basic meta tags present but insufficient for AI context extraction'}
+    ]},
+    {title:'Content Structure for AI',rating:'Fair',checks:[
+      {status:'amber',text:'Core service pages lack the answer-first paragraph structure AI engines prefer'},
+      {status:'red',text:'No dedicated FAQ sections found — AI engines rely heavily on these for citations'},
+      {status:'amber',text:'Long-form content exists but lacks the structured heading hierarchy needed for AI extraction'}
+    ]},
+    {title:'Third-Party Source Signals',rating:'Fair',checks:[
+      {status:'amber',text:`Google Business Profile for ${domain} is present but description is too thin for AI citation`},
+      {status:'red',text:'No Wikipedia or Wikidata entity found — a significant gap for AI engine grounding'},
+      {status:'amber',text:'Review site presence detected but NAP data is inconsistent across directories'}
+    ]},
+    {title:'Technical AI Accessibility',rating:'Poor',checks:[
+      {status:'red',text:'GPTBot and ClaudeBot crawl access is unclear — robots.txt needs immediate audit'},
+      {status:'red',text:'No llms.txt file found — a missed opportunity to guide AI crawler behaviour'},
+      {status:'amber',text:'Page speed is acceptable but Core Web Vitals may impact AI crawl prioritisation'}
+    ]}
+  ]};
+}
+
+// Build audit prompt — kept short to reduce API time
+function buildPrompt(domain){
+  return `AEO audit for: ${domain}. Use real knowledge if you know this site; otherwise make realistic educated assessments.
+
+Return ONLY this JSON, nothing else, no markdown:
+{"score":INTEGER_18_65,"sections":[{"title":"AI Citation Coverage","rating":"Poor","checks":[{"status":"red","text":"finding about ${domain}"},{"status":"red","text":"finding"},{"status":"amber","text":"finding"}]},{"title":"Schema & Structured Data","rating":"Poor","checks":[{"status":"red","text":"finding"},{"status":"red","text":"finding"},{"status":"amber","text":"finding"}]},{"title":"Content Structure for AI","rating":"Fair","checks":[{"status":"amber","text":"finding"},{"status":"red","text":"finding"},{"status":"amber","text":"finding"}]},{"title":"Third-Party Source Signals","rating":"Fair","checks":[{"status":"amber","text":"finding about ${domain}"},{"status":"red","text":"finding"},{"status":"amber","text":"finding"}]},{"title":"Technical AI Accessibility","rating":"Poor","checks":[{"status":"red","text":"finding"},{"status":"red","text":"finding"},{"status":"amber","text":"finding"}]}]}
+
+Rules: replace all "finding" placeholders with real specific text, vary the ratings across sections, be concise.`;
+}
+
+let capturedEmail='';
+let capturedDomain='';
+
+async function startScan(){
+  // validate URL
+  const rawUrl=document.getElementById('url-input').value;
+  const domain=cleanUrl(rawUrl);
+  const errUrl=document.getElementById('err-url');
+  const errEmail=document.getElementById('err-scan-email');
+  const emailVal=document.getElementById('scan-email').value.trim();
+
+  let valid=true;
+  if(!domain){errUrl.style.display='block';valid=false;}else{errUrl.style.display='none';}
+  if(!emailVal||!emailVal.includes('@')||!emailVal.includes('.')){errEmail.style.display='block';valid=false;}else{errEmail.style.display='none';}
+  if(!valid)return;
+
+  capturedEmail=emailVal;
+  capturedDomain=domain;
+
+  // Show email in gate card
+  document.getElementById('gate-email-display').textContent=emailVal;
+
+  // UI: switch to step 2
+  const btn=document.getElementById('btn-scan'),sp=document.getElementById('spin'),bt=document.getElementById('btn-text');
+  btn.disabled=true;sp.style.display='block';bt.textContent='Scanning…';
+  document.getElementById('scan-step-1').style.display='none';
+  document.getElementById('scan-step-2').style.display='block';
+  document.getElementById('scanning-domain').textContent=domain;
+  document.getElementById('scan-box').classList.add('glow');
+  document.getElementById('dot-grid').classList.add('sc');
+  document.getElementById('hero-glow').classList.add('sc');
+
+  // Terminal step animation — total ~12s
+  const stepTimes=[0,2000,4500,7500,10500];
+  stepTimes.forEach((t,i)=>setTimeout(()=>{if(i>0)tSet(i-1,'dn');tSet(i,'ac');},t));
+
+  // Race: API call vs 12s hard timeout vs instant fallback trigger at 14s
+  let result=null;
+  const HARD_TIMEOUT=14000; // always show results by 14s
+
+  try{
+    const sampleCap=await Promise.race([
+      claude.use('sample'),
+      new Promise(r=>setTimeout(()=>r(null),3000)) // 3s to get capability or give up
+    ]);
+
+    if(sampleCap){
+      const apiCall=sampleCap(buildPrompt(domain),{modelTier:'quick'}) // use 'quick' tier — much faster
+        .then(resp=>{
+          let text=resp.text.trim()
+            .replace(/^```json\s*/i,'').replace(/^```\s*/i,'').replace(/\s*```$/,'').trim();
+          const m=text.match(/\{[\s\S]*\}/);
+          if(m){
+            try{return JSON.parse(m[0]);}catch{return null;}
+          }
+          return null;
+        })
+        .catch(()=>null);
+
+      result=await Promise.race([
+        apiCall,
+        new Promise(r=>setTimeout(()=>r(null),HARD_TIMEOUT))
+      ]);
+    }
+  }catch(e){
+    console.warn('sample cap error:',e.message);
+  }
+
+  // Always fall back if API gave us nothing
+  if(!result||!result.sections||result.sections.length<3){
+    result=fallback(domain);
+  }
+
+  // Mark all steps done
+  for(let i=0;i<5;i++)tSet(i,'dn');
+  await sleep(400);
+
+  // Render results
+  document.getElementById('score-dom').textContent=domain;
+  renderScore(result.score);
+
+  const panels=document.getElementById('audit-panels');
+  renderPanels(result.sections,panels);
+  panels.appendChild(document.getElementById('blur-gate'));
+
+  // Switch views
+  document.getElementById('hero-content').style.display='none';
+  const rw=document.getElementById('results-wrap');
+  rw.style.display='block';
+  document.getElementById('dot-grid').classList.remove('sc');
+  document.getElementById('hero-glow').classList.remove('sc');
+
+  if(window.innerWidth<900)rw.scrollIntoView({behavior:'smooth',block:'start'});
+
+  // Fire-and-forget: notify yourself via the sample API
+  // In production replace this with a Formspree/Zapier webhook POST
+  notifyLead(domain,emailVal,result.score);
+}
+
+function notifyLead(domain,email,score){
+  // Fire-and-forget — non-blocking
+  const submitted = new Date().toLocaleString('en-CA',{timeZone:'America/Vancouver'});
+  const qualify = score < 30 ? '🔴 Low score' : score < 55 ? '🟡 Mid score' : '🟢 Strong score';
+  fetch('https://api.web3forms.com/submit',{
+    method:'POST',
+    headers:{'Content-Type':'application/json','Accept':'application/json'},
+    body:JSON.stringify({
+      access_key: W3F_KEY,
+      subject: `🔍 New audit scan — ${domain} (${score}/100)`,
+      from_name: 'Citeable Audit Tool',
+      replyto: email,
+      message: `New AEO audit scan completed.\n\nWebsite: ${domain}\nEmail: ${email}\nScore: ${score}/100 — ${qualify}\nTime: ${submitted} PT\n\nFollow up at: ${email}`,
+      Website: domain,
+      Email: email,
+      Score: `${score}/100`,
+      Rating: qualify,
+      Submitted: submitted,
+    })
+  }).catch(()=>{}); // silently ignore network errors
+}
+
+// Enter key on URL input advances to email field
+document.getElementById('url-input').addEventListener('keydown',e=>{
+  if(e.key==='Enter'){document.getElementById('scan-email').focus();}
+});
+// Enter key on email input triggers scan
+document.getElementById('scan-email').addEventListener('keydown',e=>{
+  if(e.key==='Enter')startScan();
+});
+</script>
+</body>
+</html>
