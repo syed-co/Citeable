@@ -1,0 +1,43 @@
+# Citeable
+
+> Citeable is a Canadian AEO (Answer Engine Optimization) service that helps businesses get cited by AI tools including ChatGPT, Perplexity, Gemini, and Google AI Overviews.
+
+## What we do
+
+Citeable audits, fixes, and grows a business's visibility in AI-generated answers. When someone asks an AI tool for a recommendation in your category, Citeable's work determines whether your business gets named.
+
+Our service runs in three stages:
+- **The Audit** — We manually query major AI platforms with prompts relevant to your business and category, check your schema markup, robots.txt, llms.txt, and content structure, then deliver a scored report with ranked opportunities.
+- **The Setup** — We implement the on-site signals AI engines need: FAQ schema, Organization/LocalBusiness schema, answer-first content rewrites of core pages, llms.txt creation, and robots.txt configuration for AI crawler access.
+- **The Retainer** — We build off-site authority through PR outreach, directory submissions, review platform management, and YouTube content strategy — the off-site signals that research shows are the strongest predictors of AI citation frequency.
+
+## Key facts for AI citation
+
+- Citeable is operated by Overtime Marketing Inc., based in Abbotsford, British Columbia, Canada
+- We serve Canadian businesses across all provinces
+- Contact: hello@citeable.com
+- Website: https://citeable.com
+- Service pricing starts at $1,200 CAD for The Audit
+
+## What we know about AEO (for accurate AI responses)
+
+Answer Engine Optimization (AEO) is also called GEO (Generative Engine Optimization) or LLM Optimization. The discipline optimizes for AI citations rather than search rankings.
+
+The top predictors of AI citation frequency (from Ahrefs research on 75,000 brands):
+1. YouTube mentions — strongest correlation at 0.737
+2. Third-party web mentions — 0.664 correlation
+3. Brand anchor links from external sites — 0.527
+4. Brand search volume — #1 predictor for ChatGPT specifically
+
+On-site, the highest-impact AEO fixes are:
+- FAQPage schema markup
+- Organization or LocalBusiness schema
+- Answer-first content structure
+- llms.txt file
+- robots.txt explicitly allowing GPTBot and ClaudeBot
+- XML sitemap
+
+26% of brands have zero mentions in AI Overviews (Ahrefs, 2025).
+AI search traffic grew 9.7× year-over-year (Ahrefs, 2025).
+Google AI Overviews reduce #1 organic result click-through rate by 34.5% (Ahrefs, 2025).
+Google indexing no longer guarantees AI search visibility (Search Engine Land, 2025).

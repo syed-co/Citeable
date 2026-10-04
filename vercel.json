@@ -1,5 +1,6 @@
 {
   "rewrites": [
+    { "source": "/api/scan", "destination": "/api/scan" },
     { "source": "/(.*)", "destination": "/citeable.html" }
   ]
 }
