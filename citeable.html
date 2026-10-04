@@ -18,7 +18,7 @@
       "areaServed": "Canada",
       "serviceType": ["Answer Engine Optimization", "AEO", "Generative Engine Optimization", "GEO", "AI Visibility Optimization", "LLM Optimization"],
       "knowsAbout": ["Answer Engine Optimization", "AI search visibility", "ChatGPT citations", "Perplexity optimization", "Google AI Overviews", "schema markup", "FAQ schema", "llms.txt", "brand authority for AI", "GEO"],
-      "founder": {"@type": "Organization", "name": "Overtime Marketing Inc."},
+      "parentOrganization": {"@type": "Organization", "name": "Syed Co."},
       "contactPoint": {"@type": "ContactPoint", "email": "hello@citeable.com", "contactType": "sales"}
     },
     {
@@ -527,7 +527,7 @@ footer{border-top:1px solid var(--bd);padding:32px 44px;display:flex;justify-con
 
       <!-- STEP 1: URL + Email -->
       <div id="scan-step-1">
-        <div class="scan-lbl">Scan your website for AI visibility</div>
+        <div class="scan-lbl">Check your site’s technical AI-readiness</div>
         <div class="url-row" style="margin-bottom:10px">
           <input class="url-input" id="url-input" type="text" placeholder="yourbusiness.com" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
         </div>
@@ -537,17 +537,17 @@ footer{border-top:1px solid var(--bd);padding:32px 44px;display:flex;justify-con
         </div>
         <p class="err-msg" id="err-url">Please enter a valid website URL.</p>
         <p class="err-msg" id="err-scan-email">Please enter your email to receive the report.</p>
-        <p class="scan-fine">Free · Results in ~20 seconds · Full report sent to your inbox</p>
+        <p class="scan-fine">Free · Measured on your homepage, robots.txt, sitemap and llms.txt · No account needed</p>
       </div>
 
       <!-- STEP 2: Terminal (shown while scanning) -->
       <div id="scan-step-2" style="display:none">
         <div class="scan-lbl" style="margin-bottom:12px">Scanning <span id="scanning-domain" style="color:var(--cyan)"></span></div>
         <div class="terminal" style="display:block">
-          <div class="t-line" id="t0"><span class="t-pfx">›</span><span>Initialising citation sweep…</span></div>
-          <div class="t-line" id="t1"><span class="t-pfx">›</span><span>Checking ChatGPT, Perplexity, Gemini & AI Overviews…</span></div>
+          <div class="t-line" id="t0"><span class="t-pfx">›</span><span>Starting technical audit…</span></div>
+          <div class="t-line" id="t1"><span class="t-pfx">›</span><span>Fetching homepage and crawler files…</span></div>
           <div class="t-line" id="t2"><span class="t-pfx">›</span><span>Auditing schema markup and structured data…</span></div>
-          <div class="t-line" id="t3"><span class="t-pfx">›</span><span>Reviewing third-party source signals…</span></div>
+          <div class="t-line" id="t3"><span class="t-pfx">›</span><span>Checking robots.txt and AI crawler access…</span></div>
           <div class="t-line" id="t4"><span class="t-pfx">›</span><span>Compiling your report…</span></div>
         </div>
       </div>
@@ -557,7 +557,7 @@ footer{border-top:1px solid var(--bd);padding:32px 44px;display:flex;justify-con
 
   <div class="results-wrap" id="results-wrap">
     <div class="score-bar">
-      <div><div class="score-dom" id="score-dom">domain.com</div><div class="score-sub-t">AEO Visibility Score</div></div>
+      <div><div class="score-dom" id="score-dom">domain.com</div><div class="score-sub-t">Technical checks passed</div></div>
       <div class="score-pill" id="score-pill"><span class="s-dot" id="s-dot"></span><span id="score-val">—</span></div>
     </div>
     <div class="audit-panels" id="audit-panels">
@@ -1229,113 +1229,80 @@ ${data.notes || '(none)'}
   document.getElementById('form-success').style.display='block';
 }
 
-// ── AUDIT ENGINE ──
+// ── AUDIT ENGINE (real, server-side via /api/scan) ──
 function cleanUrl(r){
-  let u=r.trim();
-  if(!u)return null;
-  // strip protocol and www
-  u=u.replace(/^https?:\/\//i,'').replace(/^www\./i,'').split('/')[0].split('?')[0];
-  // replace any commas (autocorrect turning .ca into ,ca etc)
-  u=u.replace(/,/g,'.');
-  // remove anything that's not a valid domain character
-  u=u.replace(/[^a-zA-Z0-9.\-]/g,'');
-  if(!u||u.length<3||!u.includes('.'))return null;
-  return u.toLowerCase();
+  let u=(r||'').trim().toLowerCase();
+  u=u.replace(/^https?:\/\//,'').replace(/^www\./,'').split(/[/?#]/)[0];
+  u=u.replace(/,/g,'.').replace(/[^a-z0-9.\-]/g,'');
+  if(!u||u.length<4||!u.includes('.'))return null;
+  return u;
 }
 function sleep(ms){return new Promise(r=>setTimeout(r,ms));}
 function tSet(i,s){const e=document.getElementById('t'+i);if(e)e.className='t-line'+(s?' '+s:'');}
+function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
 
-const COL={
-  red:{bar:'#FF4D6A',bg:'rgba(255,77,106,.15)',txt:'#FF4D6A',dot:'#FF4D6A'},
-  amber:{bar:'#FFB830',bg:'rgba(255,184,48,.12)',txt:'#FFB830',dot:'#FFB830'},
-  green:{bar:'#00FFD1',bg:'rgba(0,255,209,.1)',txt:'#00FFD1',dot:'#00FFD1'}
-};
-function rC(r){return(r==='Poor'||r==='Critical')?COL.red:(r==='Fair'||r==='Needs work')?COL.amber:COL.green;}
-function sC(s){return s==='red'?COL.red.dot:s==='amber'?COL.amber.dot:COL.green.dot;}
+const STATUS_DOT={fail:'#FF4D6A',warn:'#FFB830',pass:'#00FFD1'};
+function ratingFor(checks){
+  const fails=checks.filter(c=>c.status==='fail').length;
+  const warns=checks.filter(c=>c.status==='warn').length;
+  if(fails>=2)return {label:'Needs work',bar:'#FF4D6A',bg:'rgba(255,77,106,.15)',txt:'#FF4D6A'};
+  if(fails||warns)return {label:'Partly in place',bar:'#FFB830',bg:'rgba(255,184,48,.12)',txt:'#FFB830'};
+  return {label:'In place',bar:'#00FFD1',bg:'rgba(0,255,209,.1)',txt:'#00FFD1'};
+}
 
-function renderPanels(secs,container){
-  container.innerHTML='';
-  secs.forEach(sec=>{
-    const c=rC(sec.rating);
+function renderAudit(rep){
+  document.getElementById('score-dom').textContent=rep.domain;
+  document.getElementById('score-pill').style.display='none';
+  document.querySelector('.score-bar .score-sub-t').textContent=
+    `${rep.checksPassed} of ${rep.checksTotal} technical checks passed`;
+  const panels=document.getElementById('audit-panels');
+  panels.innerHTML='';
+
+  if(rep.fixFirst.length){
     const d=document.createElement('div');d.className='audit-panel';
-    d.innerHTML=`<div class="ap-head"><div class="ap-bar" style="background:${c.bar}"></div><span class="ap-title">${sec.title}</span><span class="ap-badge" style="background:${c.bg};color:${c.txt}">${sec.rating}</span></div><div class="ap-body">${sec.checks.map(ch=>`<div class="ap-check"><span class="ap-dot" style="background:${sC(ch.status)}"></span><span>${ch.text}</span></div>`).join('')}</div>`;
-    container.appendChild(d);
+    d.innerHTML=`<div class="ap-head"><div class="ap-bar" style="background:#FFB830"></div><span class="ap-title">Fix these first</span><span class="ap-badge" style="background:rgba(255,184,48,.12);color:#FFB830">${rep.fixFirst.length} priorities</span></div><div class="ap-body">${rep.fixFirst.map((f,i)=>`<div class="ap-check"><span class="ap-dot" style="background:#FFB830"></span><span><span style="color:#EEF2FF">${i+1}. ${esc(f.title)}.</span> ${esc(f.fix||'')}</span></div>`).join('')}</div>`;
+    panels.appendChild(d);
+  } else {
+    const d=document.createElement('div');d.className='audit-panel';
+    d.innerHTML=`<div class="ap-head"><div class="ap-bar" style="background:#00FFD1"></div><span class="ap-title">No priority fixes</span></div><div class="ap-body"><div class="ap-check"><span class="ap-dot" style="background:#00FFD1"></span><span>Every measured check passed on the pages scanned.</span></div></div>`;
+    panels.appendChild(d);
+  }
+
+  rep.categories.forEach(cat=>{
+    const r=ratingFor(cat.checks);
+    const d=document.createElement('div');d.className='audit-panel';
+    d.innerHTML=`<div class="ap-head"><div class="ap-bar" style="background:${r.bar}"></div><span class="ap-title">${esc(cat.name)}</span><span class="ap-badge" style="background:${r.bg};color:${r.txt}">${r.label}</span></div><div class="ap-body">${cat.checks.map(c=>`<div class="ap-check"><span class="ap-dot" style="background:${STATUS_DOT[c.status]}"></span><span><span style="color:#EEF2FF">${esc(c.title)}</span>${c.status!=='pass'&&c.detail?` — ${esc(c.detail)}`:''}</span></div>`).join('')}</div>`;
+    panels.appendChild(d);
   });
-}
 
-function renderScore(score){
-  const c=score>=70?COL.green:score>=45?COL.amber:COL.red;
-  const pill=document.getElementById('score-pill'),dot=document.getElementById('s-dot'),val=document.getElementById('score-val');
-  pill.style.background=c.bg;pill.style.borderColor=c.bar+'50';pill.style.color=c.txt;
-  dot.style.background=c.dot;dot.style.boxShadow=`0 0 6px ${c.dot}`;
-  let cur=0;
-  const tick=()=>{cur=Math.min(cur+2,score);val.textContent=cur+'/100';if(cur<score)requestAnimationFrame(tick);};
-  setTimeout(()=>requestAnimationFrame(tick),200);
-}
+  const nc=document.createElement('div');nc.className='audit-panel';
+  nc.innerHTML=`<div class="ap-head"><div class="ap-bar" style="background:#3A4560"></div><span class="ap-title">Not measured by this scan</span></div><div class="ap-body">${rep.notChecked.map(t=>`<div class="ap-check"><span class="ap-dot" style="background:#3A4560"></span><span>${esc(t)}</span></div>`).join('')}</div>`;
+  panels.appendChild(nc);
 
-function fallback(domain){
-  return {score:28,sections:[
-    {title:'AI Citation Coverage',rating:'Poor',checks:[
-      {status:'red',text:`${domain} does not appear in ChatGPT when buyers search for businesses in this category`},
-      {status:'red',text:'Perplexity cites competitor domains significantly more often for relevant queries'},
-      {status:'amber',text:'Google AI Overviews surface the domain occasionally but without a direct brand citation'}
-    ]},
-    {title:'Schema & Structured Data',rating:'Poor',checks:[
-      {status:'red',text:'No Organization or LocalBusiness schema detected on key pages'},
-      {status:'red',text:'FAQ schema absent — this is the single highest-impact AEO fix available'},
-      {status:'amber',text:'Basic meta tags present but insufficient for AI context extraction'}
-    ]},
-    {title:'Content Structure for AI',rating:'Fair',checks:[
-      {status:'amber',text:'Core service pages lack the answer-first paragraph structure AI engines prefer'},
-      {status:'red',text:'No dedicated FAQ sections found — AI engines rely heavily on these for citations'},
-      {status:'amber',text:'Long-form content exists but lacks the structured heading hierarchy needed for AI extraction'}
-    ]},
-    {title:'Third-Party Source Signals',rating:'Fair',checks:[
-      {status:'amber',text:`Google Business Profile for ${domain} is present but description is too thin for AI citation`},
-      {status:'red',text:'No Wikipedia or Wikidata entity found — a significant gap for AI engine grounding'},
-      {status:'amber',text:'Review site presence detected but NAP data is inconsistent across directories'}
-    ]},
-    {title:'Technical AI Accessibility',rating:'Poor',checks:[
-      {status:'red',text:'GPTBot and ClaudeBot crawl access is unclear — robots.txt needs immediate audit'},
-      {status:'red',text:'No llms.txt file found — a missed opportunity to guide AI crawler behaviour'},
-      {status:'amber',text:'Page speed is acceptable but Core Web Vitals may impact AI crawl prioritisation'}
-    ]}
-  ]};
-}
-
-// Build audit prompt — kept short to reduce API time
-function buildPrompt(domain){
-  return `AEO audit for: ${domain}. Use real knowledge if you know this site; otherwise make realistic educated assessments.
-
-Return ONLY this JSON, nothing else, no markdown:
-{"score":INTEGER_18_65,"sections":[{"title":"AI Citation Coverage","rating":"Poor","checks":[{"status":"red","text":"finding about ${domain}"},{"status":"red","text":"finding"},{"status":"amber","text":"finding"}]},{"title":"Schema & Structured Data","rating":"Poor","checks":[{"status":"red","text":"finding"},{"status":"red","text":"finding"},{"status":"amber","text":"finding"}]},{"title":"Content Structure for AI","rating":"Fair","checks":[{"status":"amber","text":"finding"},{"status":"red","text":"finding"},{"status":"amber","text":"finding"}]},{"title":"Third-Party Source Signals","rating":"Fair","checks":[{"status":"amber","text":"finding about ${domain}"},{"status":"red","text":"finding"},{"status":"amber","text":"finding"}]},{"title":"Technical AI Accessibility","rating":"Poor","checks":[{"status":"red","text":"finding"},{"status":"red","text":"finding"},{"status":"amber","text":"finding"}]}]}
-
-Rules: replace all "finding" placeholders with real specific text, vary the ratings across sections, be concise.`;
+  const cta=document.createElement('div');
+  cta.style.cssText='text-align:center;padding:14px 0 4px';
+  cta.innerHTML='<a href="#" class="btn-unlock" style="display:inline-block;text-decoration:none;padding:11px 20px;border-radius:8px;font-size:13.5px" onclick="openModal(event)">Walk through these findings on a call →</a>';
+  panels.appendChild(cta);
 }
 
 let capturedEmail='';
 let capturedDomain='';
 
 async function startScan(){
-  // validate URL
-  const rawUrl=document.getElementById('url-input').value;
-  const domain=cleanUrl(rawUrl);
+  const domain=cleanUrl(document.getElementById('url-input').value);
   const errUrl=document.getElementById('err-url');
   const errEmail=document.getElementById('err-scan-email');
   const emailVal=document.getElementById('scan-email').value.trim();
 
   let valid=true;
-  if(!domain){errUrl.style.display='block';valid=false;}else{errUrl.style.display='none';}
-  if(!emailVal||!emailVal.includes('@')||!emailVal.includes('.')){errEmail.style.display='block';valid=false;}else{errEmail.style.display='none';}
+  if(!domain){errUrl.textContent='Please enter a valid website URL.';errUrl.style.display='block';valid=false;}
+  else{errUrl.style.display='none';}
+  if(!emailVal||!emailVal.includes('@')||!emailVal.includes('.')){errEmail.style.display='block';valid=false;}
+  else{errEmail.style.display='none';}
   if(!valid)return;
 
-  capturedEmail=emailVal;
-  capturedDomain=domain;
+  capturedEmail=emailVal;capturedDomain=domain;
 
-  // Show email in gate card
-  document.getElementById('gate-email-display').textContent=emailVal;
-
-  // UI: switch to step 2
   const btn=document.getElementById('btn-scan'),sp=document.getElementById('spin'),bt=document.getElementById('btn-text');
   btn.disabled=true;sp.style.display='block';bt.textContent='Scanning…';
   document.getElementById('scan-step-1').style.display='none';
@@ -1345,93 +1312,64 @@ async function startScan(){
   document.getElementById('dot-grid').classList.add('sc');
   document.getElementById('hero-glow').classList.add('sc');
 
-  // Terminal step animation — total ~12s
-  const stepTimes=[0,2000,4500,7500,10500];
-  stepTimes.forEach((t,i)=>setTimeout(()=>{if(i>0)tSet(i-1,'dn');tSet(i,'ac');},t));
+  [0,1500,3500,5500,7500].forEach((t,i)=>setTimeout(()=>{if(i>0)tSet(i-1,'dn');tSet(i,'ac');},t));
 
-  // Race: API call vs 12s hard timeout vs instant fallback trigger at 14s
-  let result=null;
-  const HARD_TIMEOUT=14000; // always show results by 14s
-
+  let report=null,errorMsg=null;
+  const ctrl=new AbortController();
+  const timer=setTimeout(()=>ctrl.abort(),25000);
   try{
-    const sampleCap=await Promise.race([
-      claude.use('sample'),
-      new Promise(r=>setTimeout(()=>r(null),3000)) // 3s to get capability or give up
-    ]);
-
-    if(sampleCap){
-      const apiCall=sampleCap(buildPrompt(domain),{modelTier:'quick'}) // use 'quick' tier — much faster
-        .then(resp=>{
-          let text=resp.text.trim()
-            .replace(/^```json\s*/i,'').replace(/^```\s*/i,'').replace(/\s*```$/,'').trim();
-          const m=text.match(/\{[\s\S]*\}/);
-          if(m){
-            try{return JSON.parse(m[0]);}catch{return null;}
-          }
-          return null;
-        })
-        .catch(()=>null);
-
-      result=await Promise.race([
-        apiCall,
-        new Promise(r=>setTimeout(()=>r(null),HARD_TIMEOUT))
-      ]);
-    }
+    const res=await fetch('/api/scan',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({domain}),signal:ctrl.signal});
+    const data=await res.json().catch(()=>({error:'The scanner returned an unreadable response.'}));
+    if(!res.ok)errorMsg=data.error||'The scan failed. Try again.';
+    else report=data;
   }catch(e){
-    console.warn('sample cap error:',e.message);
-  }
+    errorMsg=e.name==='AbortError'?'The scan took too long. Try again in a moment.':'Could not reach the scanner. Check your connection and try again.';
+  }finally{clearTimeout(timer);}
 
-  // Always fall back if API gave us nothing
-  if(!result||!result.sections||result.sections.length<3){
-    result=fallback(domain);
-  }
-
-  // Mark all steps done
   for(let i=0;i<5;i++)tSet(i,'dn');
-  await sleep(400);
 
-  // Render results
-  document.getElementById('score-dom').textContent=domain;
-  renderScore(result.score);
+  if(errorMsg){
+    btn.disabled=false;sp.style.display='none';bt.textContent='Scan now';
+    document.getElementById('scan-step-2').style.display='none';
+    document.getElementById('scan-step-1').style.display='block';
+    document.getElementById('scan-box').classList.remove('glow');
+    document.getElementById('dot-grid').classList.remove('sc');
+    document.getElementById('hero-glow').classList.remove('sc');
+    errUrl.textContent=errorMsg;errUrl.style.display='block';
+    return;
+  }
 
-  const panels=document.getElementById('audit-panels');
-  renderPanels(result.sections,panels);
-  panels.appendChild(document.getElementById('blur-gate'));
-
-  // Switch views
+  await sleep(300);
+  renderAudit(report);
   document.getElementById('hero-content').style.display='none';
   const rw=document.getElementById('results-wrap');
   rw.style.display='block';
   document.getElementById('dot-grid').classList.remove('sc');
   document.getElementById('hero-glow').classList.remove('sc');
-
+  btn.disabled=false;sp.style.display='none';bt.textContent='Scan now';
   if(window.innerWidth<900)rw.scrollIntoView({behavior:'smooth',block:'start'});
-
-  // Fire-and-forget: notify yourself via the sample API
-  // In production replace this with a Formspree/Zapier webhook POST
-  notifyLead(domain,emailVal,result.score);
+  notifyLead(report,emailVal);
 }
 
-function notifyLead(domain,email,score){
-  // Fire-and-forget — non-blocking
-  const submitted = new Date().toLocaleString('en-CA',{timeZone:'America/Vancouver'});
-  const qualify = score < 30 ? '🔴 Low score' : score < 55 ? '🟡 Mid score' : '🟢 Strong score';
+function notifyLead(rep,email){
+  const submitted=new Date().toLocaleString('en-CA',{timeZone:'America/Vancouver'});
+  const failing=rep.categories.flatMap(c=>c.checks).filter(c=>c.status==='fail').length;
   fetch('https://api.web3forms.com/submit',{
     method:'POST',
     headers:{'Content-Type':'application/json','Accept':'application/json'},
     body:JSON.stringify({
-      access_key: W3F_KEY,
-      subject: `🔍 New audit scan — ${domain} (${score}/100)`,
-      from_name: 'Citeable Audit Tool',
-      replyto: email,
-      message: `New AEO audit scan completed.\n\nWebsite: ${domain}\nEmail: ${email}\nScore: ${score}/100 — ${qualify}\nTime: ${submitted} PT\n\nFollow up at: ${email}`,
-      Website: domain,
-      Email: email,
-      Score: `${score}/100`,
-      Rating: qualify,
-      Submitted: submitted,
+      access_key:W3F_KEY,
+      subject:`🔍 New site scan — ${rep.domain} (${failing} failing checks)`,
+      from_name:'Citeable Audit Tool',
+      replyto:email,
+      message:`Website: ${rep.domain}\nEmail: ${email}\nChecks passed: ${rep.checksPassed} of ${rep.checksTotal}\nFailing checks: ${failing}\nTop fix: ${rep.fixFirst[0]?rep.fixFirst[0].title:'none'}\nTime: ${submitted} PT`,
+      Website:rep.domain,
+      Email:email,
+      ChecksPassed:`${rep.checksPassed}/${rep.checksTotal}`,
+      FailingChecks:String(failing),
+      Submitted:submitted,
     })
-  }).catch(()=>{}); // silently ignore network errors
+  }).catch(()=>{});
 }
 
 // Enter key on URL input advances to email field
